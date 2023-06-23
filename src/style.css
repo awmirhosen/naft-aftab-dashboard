@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    src: url("../public/fonts/iransans/IRANSansWeb.woff2");
+    font-family: IRANSansWeb;
+    font-weight: normal;
+}
+@font-face {
+    src: url("../public/fonts/iransans/IRANSansWeb_Bold.woff2");
+    font-family: IRANSansWeb;
+    font-weight: bold;
+}
+* {
+    font-family: IRANSansWeb;
+}
+.bg-dark-custom {
+    background: #131313;
+}
+.bg-dark-custom-sidebar {
+    background: #181818;
+}
+.custom-shadow-1 {
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 8px;
+}
