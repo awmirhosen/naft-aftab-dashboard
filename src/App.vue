@@ -14,17 +14,17 @@
 </template>
 
 <script setup>
-import Sidebar from "./components/sidebar/Sidebar.vue";
+import Sidebar from "./components/dashboard/sidebar/Sidebar.vue";
 import {useRoute} from "vue-router";
 import {ref, watch} from "vue";
-import Login from "./view/auth/Login.vue";
+import Login from "./view/auth/Auth.vue";
 
 const route = useRoute();
 const layout = ref(1)
 
 watch(route, () => {
   switch (route.name) {
-    case "login":
+    case "auth":
       layout.value = 2;
       break;
     default:

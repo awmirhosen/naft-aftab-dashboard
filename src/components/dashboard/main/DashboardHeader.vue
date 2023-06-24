@@ -19,7 +19,7 @@
 
 <script>
 import {defineComponent} from "vue";
-import Searchbox from "../ui/Searchbox.vue";
+import Searchbox from "../../ui/Searchbox.vue";
 
 export default defineComponent({
   components: {Searchbox}

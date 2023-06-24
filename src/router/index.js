@@ -7,19 +7,19 @@ routes:[
     {
         path: "/",
         name: "Dashboard",
-        component: import("../view/Dashboard.vue")
+        component: () => import("../view/Dashboard.vue")
     },
     // users
     {
         path: "/users",
         name: "users",
-        component: import("../view/users/Users.vue")
+        component: () => import("../view/users/Users.vue")
     },
     // login
     {
-        path: "/login",
-        name: "login",
-        component: import("../view/auth/Login.vue")
+        path: "/auth",
+        name: "auth",
+        component: () => import("../view/auth/Auth.vue")
     }
 
 ]

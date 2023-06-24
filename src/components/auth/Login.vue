@@ -1,0 +1,81 @@
+<template>
+  <div class="w-[22rem] rounded-md p-3">
+    <!--    logo for login layout-->
+    <div class="w-100 flex justify-center">
+      <img src="public/images/ui/naftaftab_logo.png" width="120" alt="Company Logo">
+    </div>
+
+    <div v-if="step === 1" class="w-100 h-100">
+      <p class="text-md text-center w-100">خوش آمدید</p>
+      <p class="text-sm text-center w-100">لطفا شماره تلفن خود را وارد کنید</p>
+      <Form class="p-4" @submit="submitPhoneNumber" :validation-schema="phoneSchema">
+        <div class="mb-4">
+          <!--Large input-->
+          <div class="my-2 border mx-auto border-[2px] w-full justify-center flex items-center rounded-md shadow-md"
+               dir="rtl">
+            <div>
+              <svg width="25" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/>
+              </svg>
+            </div>
+
+            <div class="">
+              <Field type="text"
+                     name="phoneNumber"
+                     class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
+                     placeholder="تلفن همراه خود را وارد کنید"/>
+            </div>
+          </div>
+          <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="phoneNumber"/>
+          <button class="bg-indigo-900 text-white w-full mt-3 p-2 rounded hover:bg-indigo-800 transition-all">
+            ارسال کد
+          </button>
+        </div>
+      </Form>
+    </div>
+
+
+    <div class="p-3" v-if="step === 2">
+      <p class="text-md mb-3 text-center">کد ارسال شده را وارد کنید</p>
+      <OTPPad :length="6"/>
+      <div class="flex justify-center text-blue-600 text-lg mt-8">
+        <div class="flex justify-center items-center gap-2 w-full cursor-pointer" v-if="authStore.loginCounterFlag">
+          <p class="text-sm">ارسال دوباره کد</p>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </div>
+        <Countdown v-else/>
+      </div>
+      <button class="hover:bg-indigo-800 transiton-all bg-indigo-900 text-white rounded w-full mt-4 py-2">تایید کد
+      </button>
+    </div>
+
+  </div>
+
+</template>
+
+<script setup>
+
+import {Form, Field, ErrorMessage} from "vee-validate";
+import {phoneSchema} from "../../validation/schemas.js";
+import OTPPad from "../ui/OTPPad.vue";
+import {ref} from "vue";
+import Countdown from "../ui/Countdown.vue";
+import {useAuthStore} from "../../store/auth.js";
+
+const step = ref(2);
+
+const authStore = useAuthStore();
+
+const submitPhoneNumber = (value) => {
+  console.log(value)
+}
+
+</script>
+
+<style scoped>
+
+</style>

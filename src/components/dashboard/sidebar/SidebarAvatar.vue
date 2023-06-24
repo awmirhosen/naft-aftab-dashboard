@@ -5,7 +5,7 @@
       <div class="bordered-hex bg-blue-600">
         <div class="inherit-hex flex items-center justify-center">
           <div class="hex overflow-hidden">
-            <img src="../../../public/images/test/DSC01817%20(2).JPG" alt="">
+            <img src="../../../../public/images/test/DSC01817%20(2).JPG" alt="">
           </div>
         </div>
       </div>

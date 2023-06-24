@@ -14,7 +14,7 @@
 
 <script setup>
 
-import DashboardHeader from "../components/dashboard/DashboardHeader.vue";
+import DashboardHeader from "../components/dashboard/main/DashboardHeader.vue";
 </script>
 
 <style scoped>
