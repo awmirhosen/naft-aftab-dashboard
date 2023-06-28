@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {axios} from "../axios/index.js";
-import users from "../view/users/Users.vue";
+
 
 const usersError = [
     {
@@ -24,6 +24,7 @@ const loginError = [
     }
 ]
 
+
 export const useAuthStore = defineStore("auth", {
     state: () => {
         return {
@@ -32,27 +33,53 @@ export const useAuthStore = defineStore("auth", {
             stepSignup: 1,
             stepLogin: 1,
             signupError: null,
+            otpvalue: null,
         }
     },
-    actions : {
-        loginUser(otpData, loading) {
-            axios.post("auth?method=send_mobile_token", otpData, {
-                headers : {
-                    "Content-Type" : "application/json"
-                }
-            }).then(res => {
-                console.log(res)
+    actions: {
+        otpSubmit(data, loading) {
+            axios.post("auth?method=verify_mobile", data).then(res => {
+                console.log(res.data.jwt_token)
+                localStorage.setItem("token", res.data.jwt_token)
+                this.router.push("/");
                 loading.value = false;
-                this.stepLogin = 2;
             }).catch(err => {
-                console.log(err)
-                loginError.forEach(item => {
-                    if (item.en === err.response.data.error_code ) {
-                        console.log(item.fa);
-                        this.signupError = item.fa;
-                    }
-                })
+                console.log(err);
+                if (err.response.data.error_code === "token_otp_not_valid") {
+                    this.signupError = "کد وارد شده صحیح نمی باشد"
+                    loading.value = false;
+                } else if (err.response.data.error_code === "token_otp_is_expire") {
+                    this.signupError = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
+                    loading.value = false;
+                }else {
+                    this.signupError = "در ارتباط با سرور مشکلی پیش آمده لطفا در زمان دیگری امتحان کنید"
+                }
+            })
+        },
+        loginUser(loginOtpData, loading) {
+            axios.post("auth?method=verify_mobile", loginOtpData).then(res => {
+                localStorage.setItem("token", res.data.jwt_token)
+                this.router.push("/");
                 loading.value = false;
+            }).catch(err => {
+                console.log(err);
+                if (err.response.data.error_code === "token_otp_not_valid") {
+                    this.signupError = "کد وارد شده صحیح نمی باشد"
+                    loading.value = false;
+                } else if (err.response.data.error_code === "token_otp_is_expire") {
+                    this.signupError = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
+                    loading.value = false;
+                }else if (err.response.data.error_code === "mobile_is_already_confirmed") {
+                    axios.post("auth?method=sign_in_with_token", loginOtpData).then(res => {
+                        console.log(res)
+                        this.router.push("/");
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }
+                else {
+                    this.signupError = "در ارتباط با سرور مشکلی پیش آمده لطفا در زمان دیگری امتحان کنید"
+                }
             })
         },
         signupUser(data, loading, otpData) {
@@ -61,19 +88,7 @@ export const useAuthStore = defineStore("auth", {
             axios.post("/auth?method=sign_up", data).then(res => {
                 console.log(res);
                 if (!res.data.error) {
-                    axios.post("auth?method=send_mobile_token", otpData, {
-                        headers : {
-                            "Content-Type" : "application/json"
-                        }
-                    }).then(res => {
-                        console.log(res)
-                        loading.value = false;
-                        this.stepSignup = 2;
-                    }).catch(err => {
-                        console.log(err)
-                        this.signupError = "مشکلی در ارسال پیام پیش آمده"
-                        loading.value = false;
-                    })
+                    this.sendMobileToken(otpData, loading)
                 }
             }).catch(err => {
                 loading.value = false;
@@ -81,11 +96,31 @@ export const useAuthStore = defineStore("auth", {
                     this.signupError = "مشکلی در ارتباط با سرور پیش آمده است"
                 }
                 usersError.forEach(item => {
-                    if (item.en === err.response.data.error_code ) {
+                    if (item.en === err.response.data.error_code) {
                         console.log(item.fa);
                         this.signupError = item.fa;
                     }
                 })
+            })
+        },
+        sendMobileToken(otpData, loading) {
+            axios.post("auth?method=send_mobile_token", otpData, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(res => {
+                console.log(res)
+                loading.value = false;
+                this.stepLogin = 2;
+                this.stepSignup = 2;
+            }).catch(err => {
+                console.log(err.response.data.error_code)
+                if (err.response.data.error_code === "user_login_not_exist") {
+                    this.signupError = "این شماره همراه در سیستم موجود نمیباشد، لطفا ثبت نام کنید"
+                }else {
+                    this.signupError = "مشکلی در ارسال پیام پیش آمده"
+                    loading.value = false;
+                }
             })
         }
     }

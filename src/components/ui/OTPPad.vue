@@ -15,6 +15,7 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
+import {useAuthStore} from "../../store/auth.js";
 
 const otpProps = defineProps({
   length: {
@@ -25,6 +26,8 @@ const otpProps = defineProps({
 const otpArray = ref([]);
 const container = ref(null);
 const otpEmit = defineEmits(['entered'])
+
+const authStore = useAuthStore();
 
 onMounted(() => {
   for(let i =0; i < otpProps.length; i++){
@@ -56,13 +59,15 @@ const handleEnter = (e, i) => {
       }, 100)
     }
     checkOTP()
-    console.log(otpArray.value.join(''))
+    authStore.otpvalue = otpArray.value.join('');
+    console.log(authStore.otpvalue)
+
   }
 
   function checkOTP(){
     const children = container.value.children
 
-    let flag = true
+    let flag = true;
 
     for(let i=0; i < otpProps.length -1; i++){
       if(otpArray.value[i] == null)

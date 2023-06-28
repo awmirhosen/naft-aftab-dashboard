@@ -97,7 +97,7 @@
       <p class="text-md mb-3 text-center">کد ارسال شده را وارد کنید</p>
       <OTPPad :length="6"/>
       <div class="flex justify-center text-blue-600 text-lg mt-8">
-        <div class="flex justify-center items-center gap-2 w-full cursor-pointer" v-if="authStore.loginCounterFlag">
+        <div class="flex justify-center items-center gap-2 w-full cursor-pointer" @click="sendOtpAgain" v-if="authStore.loginCounterFlag">
           <p class="text-sm">ارسال دوباره کد</p>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor" class="w-5 h-5">
@@ -109,13 +109,17 @@
         <Countdown v-else/>
       </div>
       <div class="flex justify-center">
-        <button class="hover:bg-indigo-800 w-96 mx-auto transiton-all bg-indigo-900 text-white rounded w-full mt-4 py-2">
-          تایید کد
+        <button class="hover:bg-indigo-800 w-96 mx-auto transiton-all bg-indigo-900 text-white rounded w-full mt-4 py-2" @click="submitOtp" >
+          <div class="flex justify-center" v-if="loading">
+            <Loader />
+          </div>
+          <p v-else>تایید کد</p>
         </button>
       </div>
+      <p class="text-center w-full text-red-600 mt-3">{{ authStore.signupError }}</p>
     </div>
-
   </div>
+
 </template>
 
 <script setup>
@@ -131,13 +135,16 @@ const loading = ref(false);
 // calling auth store in pinia
 const authStore = useAuthStore();
 // navigate user to login component
+const user_login = ref("")
 const goToLogin = () => {
   authStore.authStatus = "login";
 }
 
 const submitSignup = (values) => {
+  authStore.signupError = null;
   loading.value = true;
   console.log(values)
+  user_login.value = values.user_login
   const data = {
     request_params : values
   }
@@ -146,7 +153,29 @@ const submitSignup = (values) => {
       user_login: values.user_login
     }
   }
-  authStore.signupUser(data, loading, otpData)
+  authStore.signupUser(data, loading, otpData);
+}
+
+const submitOtp = () => {
+  authStore.signupError = null;
+  const data = {
+    request_params : {
+      user_login : user_login.value,
+      token : authStore.otpvalue,
+    }
+  }
+  authStore.otpSubmit(data, loading);
+}
+
+const sendOtpAgain = () => {
+  authStore.signupError = null;
+  const otpData = {
+    request_params : {
+      user_login: user_login.value
+    }
+  }
+  authStore.loginCounterFlag = false;
+  authStore.sendMobileToken(otpData, loading)
 }
 
 </script>

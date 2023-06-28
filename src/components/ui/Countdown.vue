@@ -17,7 +17,7 @@ const authStore = useAuthStore();
 var intervalTimer;
 
 onMounted(() => {
-  setTime(10)
+  setTime(130)
 })
 
 const setTime = (seconds) => {

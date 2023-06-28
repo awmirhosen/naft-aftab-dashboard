@@ -6,7 +6,7 @@ routes:[
     // dashboard
     {
         path: "/",
-        name: "Dashboard",
+        name: "dashboard",
         component: () => import("../view/Dashboard.vue")
     },
     // users

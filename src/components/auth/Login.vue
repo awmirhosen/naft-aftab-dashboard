@@ -56,9 +56,9 @@
           </svg>
         </div>
         <!--        countdown -->
-        <Countdown v-else/>
+        <Countdown v-else />
       </div>
-      <button class="hover:bg-indigo-800 transiton-all bg-indigo-900 text-white rounded w-full mt-4 py-2">تایید کد
+      <button class="hover:bg-indigo-800 transiton-all bg-indigo-900 text-white rounded w-full mt-4 py-2" @click="sendLoginOtp" >تایید کد
       </button>
     </div>
 
@@ -74,8 +74,9 @@ import {ref} from "vue";
 import Countdown from "../ui/Countdown.vue";
 import {useAuthStore} from "../../store/auth.js";
 
-const step = ref(1);
+
 const loading = ref(false);
+const user_login = ref(null)
 
 const authStore = useAuthStore();
 const submitPhoneNumber = (values) => {
@@ -84,7 +85,20 @@ const submitPhoneNumber = (values) => {
       user_login: values.user_login,
     }
   }
-  authStore.loginUser(otpData, loading);
+  user_login.value = values.user_login;
+  authStore.sendMobileToken(otpData, loading);
+}
+
+const sendLoginOtp = () => {
+  const loginOtpData = {
+    request_params : {
+      user_login: user_login.value,
+      token: authStore.otpvalue,
+    }
+  }
+
+  authStore.loginUser(loginOtpData, loading)
+
 }
 
 const goToSignup = () => {
