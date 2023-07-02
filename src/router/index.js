@@ -15,6 +15,16 @@ routes:[
         name: "users",
         component: () => import("../view/users/Users.vue")
     },
+    {
+        path: "/bussiness",
+        name: "bussiness",
+        component: () => import("../view/bussiness/Bussiness.vue")
+    },
+    {
+        path: "/bussiness/add-form",
+        name: "addForm",
+        component: () => import("../view/bussiness/AddForm.vue")
+    },
     // login
     {
         path: "/auth",

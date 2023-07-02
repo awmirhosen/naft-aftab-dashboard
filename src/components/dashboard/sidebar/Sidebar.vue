@@ -3,7 +3,10 @@
     <!--    avatar component-->
     <SidebarAvatar/>
     <!--    links and dropdowns-->
-    <SidebarItems />
+    <!--    link for admin-->
+    <SidebarItems v-if="userRole === 1"/>
+    <!--    links for client-->
+    <SiderbarItemsClient v-if="userRole === 2" />
 
   </div>
 </template>
@@ -12,8 +15,11 @@
 import SidebarAvatar from "./SidebarAvatar.vue";
 import RoundedDesignTop from "./RoundedDesignTop.vue";
 import SidebarItems from "./SidebarItems.vue";
+import {ref} from "vue";
+import SiderbarItemsClient from "./SiderbarItemsClient.vue";
 
 
+const userRole = ref(2);
 
 
 </script>

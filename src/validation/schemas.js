@@ -12,17 +12,23 @@ export const signupShcema = reactive({
 })
 
 export const formSchema = reactive({
-    full_name: Yup.string().required("این فیلد الزامیست"),
-    bussiness: Yup.string().required("این فیلد الزامیست"),
-    phone: Yup.string(),
-    client_gender: Yup.string().required("انتخاب جنسیت الزامیست"),
+    client_bussiness_type: Yup.string().required("این فیلد الزامیست"),
+    client_bussiness_subcategory: Yup.string().required("این فیلد الزامیست"),
+})
+
+export const firstStepFormSchema = reactive({
+    client_full_name: Yup.string().required("این فیلد الزامیست"),
+    client_bussiness_name: Yup.string().required("این فیلد الزامیست"),
+    client_phone: Yup.string().required("این فیلد اجباریست"),
     client_email: Yup.string().email("فرمت وارد شده صحیح نیست"),
+    client_gender: Yup.string().required("انتخاب این فیلد الزامیست"),
+})
+
+export const secondStepFormSchema = reactive({
     client_state: Yup.string().required("انتخاب استان مورد نظر الزامیست"),
     client_city: Yup.string().required("انتخاب شهر استان مورد نظر الزامیست"),
     client_address: Yup.string().required("وارد کردن آدرس الزامیست"),
     client_postalcode: Yup.string().required("پر کردن کد پستی الزامیست").matches(/^[0-9]{5,10}$/, "کد پستی شما معتبر نیست"),
-    client_telephone: Yup.string().required("پر کردن این فیلد الزامیست").matches(/^[0-9]$/, "تلفن قابت معتبر نیست"),
+    client_telephone: Yup.string().required("پر کردن این فیلد الزامیست").matches(/^[0-9]{8,11}$/, "تلفن قابت معتبر نیست"),
     client_fax: Yup.string(),
-    client_bussiness_type: Yup.string().required("این فیلد الزامیست"),
-    client_bussiness_subcategory: Yup.string().required("این فیلد الزامیست"),
 })

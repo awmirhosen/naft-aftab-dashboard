@@ -2,15 +2,15 @@
   <section class="w-full flex justify-center items-center my-10 border p-4 border-zinc-200 rounded">
     <form class="w-full">
       <div class="form-group w-full">
-        <label class="text-gray-600 font-semibold text-lg">به دلخواه تعدادی از نحصولات خود را ورد کنید</label>
-        <div class="input wrapper flex items-center w-full"
+        <label class="text-gray-600 font-semibold text-lg">به دلخواه تعدادی از محصولات خود را وارد کنید</label>
+        <div class="input wrapper flex items-center w-full p-2 border border-zinc-300 rounded mt-4"
              v-for="(input, index) in phone"
              :key="`phoneInput-${index}`"
         >
-          <Field
+          <input
               type="text"
               v-model="input.phone"
-              class="h-10 rounded-lg outline-none p-2 w-full"
+              class="h-10 rounded-lg outline-none w-full p-3"
               placeholder=" نام محصول"
               @change="console.log(phone)"
           />
