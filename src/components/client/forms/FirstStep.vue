@@ -2,7 +2,8 @@
   <div class="step-1">
 
     <!--    modal of file input-->
-    <div class="fixed top-0 left-0 flex justify-center items-center w-full h-screen bg-zinc-800/[0.7]" v-if="formsStore.modalFileInput" >
+    <div class="fixed top-0 left-0 flex justify-center items-center w-full h-screen bg-zinc-800/[0.7]"
+         v-if="formsStore.modalFileInput">
       <div class="w-96 rounded bg-white h-[500px] relative p-2">
         <div class="flex justify-between items-center">
           <p>آپلو کردن فایل</p>
@@ -20,14 +21,15 @@
               <div class="col-md-5 offset-md-1">
                 <form @submit.prevent="submitMedia" enctype="multipart/form-data">
                   <div class="form-group">
-                    <input type="file" accept="image/*" ref="upload" @change="previewImage" class="custom-file-input" id="my-file" name="buss_doc">
+                    <input type="file" accept="image/*" ref="upload" @change="previewImage" class="custom-file-input"
+                           id="my-file" name="buss_doc">
                     <div class=" p-2 mt-3">
                       <template v-if="preview">
                         <div class="flex justify-center gap-3 items-center">
-                          <img :src="preview" class="img-fluid" width="80" alt="uploaded_file" />
+                          <img :src="preview" class="img-fluid" width="80" alt="uploaded_file"/>
                           <div>
                             <p class="mb-0">نام فایل: {{ image.name }}</p>
-                            <p class="mb-0">سایز فایل: {{ Math.floor(image.size/1024) }}KB</p>
+                            <p class="mb-0">سایز فایل: {{ Math.floor(image.size / 1024) }}KB</p>
                           </div>
                         </div>
                       </template>
@@ -35,7 +37,9 @@
                   </div>
 
                   <div class="w-full">
-                    <input ref="titleInput" type="text" class="shadow-md border shadow-md w-10/12 text-sm p-2 border-zinc-300 rounded" placeholder="عنوان فایل را وارد کنید*">
+                    <input ref="titleInput" type="text"
+                           class="shadow-md border shadow-md w-10/12 text-sm p-2 border-zinc-300 rounded"
+                           placeholder="عنوان فایل را وارد کنید*">
                   </div>
 
                   <div class="w-full text-center text-blue-600 text-md" v-if="loading">
@@ -44,13 +48,13 @@
 
                   <div class="w-full text-center flex justify-center gap-2 mt-4 items-center" v-if="percent > 0">
                     <p>{{ percent }} % </p>
-                    <Loader />
+                    <Loader/>
                   </div>
 
                   <div class="absolute bottom-5 w-full">
-                    <p class="text-red-600 text-sm" v-if="titleInputError" >وارد کردن عنوان برای فایل الزامیست</p>
-                    <p class="text-red-600 text-sm" v-if="fileInputError" >بارگذاری عکس الزامیست</p>
-                    <button class="w-10/12 mt-2 bg-indigo-900 rounded p-1 text-white" type="submit" >ثبت فایل</button>
+                    <p class="text-red-600 text-sm" v-if="titleInputError">وارد کردن عنوان برای فایل الزامیست</p>
+                    <p class="text-red-600 text-sm" v-if="fileInputError">بارگذاری عکس الزامیست</p>
+                    <button class="w-10/12 mt-2 bg-indigo-900 rounded p-1 text-white" type="submit">ثبت فایل</button>
                     <button class="w-10/12 mt-2 bg-zinc-200 rounded p-1" @click="reset">پاک کردن فایل</button>
                   </div>
 
@@ -130,7 +134,8 @@
     <div class="flex w-full gap-3 ">
       <!--        gender selectbox-->
       <div class="w-full">
-        <Field name="client_gender" :value="formStore.firstStepData.client_gender" as="select" class="w-full p-2 border border-zinc-200 rounded shadow-md">
+        <Field name="client_gender" :value="formStore.firstStepData.client_gender" as="select"
+               class="w-full p-2 border border-zinc-200 rounded shadow-md">
           <option value="" selected>لطفا جنسیت خود را انتخاب کنید</option>
           <option value="مرد">مرد</option>
           <option value="زن">زن</option>
@@ -142,6 +147,7 @@
 
     <!--        file uploader-->
     <div class="w-full mt-5">
+
       <div class="text-center">
         <p class="mb-1">محل بارگذاری مستندات محصولات</p>
         <p class="mb-3 text-sm text-blue-600">تعداد مستندات آپلود شده میتواند بیش از یک عدد باشد و هر کدام باید همراه با
@@ -149,14 +155,16 @@
       </div>
 
       <div @click="openFileUploadModal"
-          class="w-full h-full rounded border-dashed border-2 cursor-pointer bg-zinc-100 p-2 border-zinc-900 flex justify-center items-center">
+           class="w-full h-full rounded border-dashed border-2 cursor-pointer bg-zinc-100 p-2 border-zinc-900 flex justify-center items-center">
         <p>برای بارگذاری فایل اینجا کلیک کنید</p>
       </div>
 
-      <div class="flex justify-center gap-4 mt-4" v-if="formsStore.firstStepData.mediaUrlArray !== []">
-        <div v-for="(media, index) in formsStore.firstStepData.mediaUrlArray" :key="index">
+      <div class="flex justify-center gap-4 mt-4" v-if="formsStore.firstStepFiles !== []">
+        <div v-for="(media, index) in formsStore.firstStepFiles" :key="index">
           <img :src="media.url" alt="doc picture" class="h-24">
-          <div class="w-full bg-red-800 text-white text-center mt-2 rounded cursor-pointer" @click="deleteMedia" >حذف</div>
+          <div class="w-full bg-red-800 text-white text-center mt-2 rounded cursor-pointer"
+               @click="deleteMedia(media.id, index)">حذف
+          </div>
         </div>
       </div>
 
@@ -185,25 +193,8 @@ import Loader from "../../ui/Loader.vue";
 
 
 const formStore = useFormsStore();
-
 const upload = ref(null);
 const loading = ref(false);
-
-const mediaArray = reactive([]);
-const medaiUrlArray = reactive([]);
-
-
-const formsStore = useFormsStore();
-const openFileUploadModal = () => {
-  reset();
-  formsStore.firstStepData.media = [];
-  formsStore.modalFileInput = true;
-}
-
-const closeFileModal = () => {
-  formsStore.modalFileInput = false
-}
-
 // image preview variables
 const preview = ref(null);
 const image = ref(null);
@@ -212,6 +203,26 @@ const titleInput = ref(null);
 // create a form data instance
 const formData = new FormData();
 const percent = ref(0);
+// title and files error variables
+const titleInputError = ref(false);
+const fileInputError = ref(false);
+
+
+const mediaArray = reactive([]);
+
+
+
+const formsStore = useFormsStore();
+const openFileUploadModal = () => {
+
+  reset();
+  formsStore.modalFileInput = true;
+}
+
+const closeFileModal = () => {
+  formsStore.modalFileInput = false
+}
+
 
 // preview image function
 const previewImage = (e) => {
@@ -234,9 +245,7 @@ const reset = () => {
   preview.value = null;
 }
 
-// title and files error variables
-const titleInputError = ref(false);
-const fileInputError = ref(false);
+
 
 // submit media in modal
 const submitMedia = () => {
@@ -259,10 +268,9 @@ const submitMedia = () => {
         }
       }).then(res => {
         loading.value = false;
-        mediaArray.push(res.data[0].media_id);
-        medaiUrlArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`})
+        mediaArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
         axios.post("/media?action=set_media_meta", {
-          request_params : {
+          request_params: {
             media_id: res.data[0].media_id,
             meta_key: "media_caption",
             meta_value: titleInput.value.value,
@@ -271,7 +279,7 @@ const submitMedia = () => {
           reset();
           formsStore.modalFileInput = false;
           formStore.firstStepData.media = mediaArray;
-          formsStore.firstStepData.mediaUrlArray = medaiUrlArray;
+          formsStore.firstStepFiles = mediaArray;
         }).catch(err => {
           console.log(err);
         })
@@ -282,12 +290,13 @@ const submitMedia = () => {
     }
   }
 
-  console.log(formStore.firstStepData)
-
 }
 
-const deleteMedia = () => {
-
+const deleteMedia = (media_id, index) => {
+  console.log(mediaArray[0]);
+  mediaArray.splice(index, 1);
+  formStore.firstStepFiles = mediaArray;
+  console.log("pinia,", formStore.firstStepFiles)
 }
 
 </script>
@@ -297,6 +306,7 @@ const deleteMedia = () => {
 .custom-file-input::-webkit-file-upload-button {
   visibility: hidden;
 }
+
 .custom-file-input::before {
   text-align: center;
   line-height: 65px;
@@ -316,6 +326,7 @@ const deleteMedia = () => {
   font-weight: 700;
   font-size: 10pt;
 }
+
 .custom-file-input:hover::before {
   border-color: black;
 }

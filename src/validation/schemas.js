@@ -32,3 +32,8 @@ export const secondStepFormSchema = reactive({
     client_telephone: Yup.string().required("پر کردن این فیلد الزامیست").matches(/^[0-9]{8,11}$/, "تلفن قابت معتبر نیست"),
     client_fax: Yup.string(),
 })
+
+export const thirdFormSchema = reactive({
+    bussiness_type: Yup.string().required("این فیلد الزامیست"),
+    client_bussiness_subcategory: Yup.string().required("پر کردن این فیلد الزامیست"),
+})

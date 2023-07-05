@@ -4,13 +4,12 @@ export const useFormsStore = defineStore("forms", {
     state : () => {
         return {
             modalFileInput : false,
+            firstStepFiles: [],
             firstStepData : {
                 client_full_name: "",
                 client_bussiness_name: "",
                 client_email: "",
                 client_gender: "",
-                media: [],
-                mediaUrlArray: []
             },
             secondStepData : {
                 client_state: "",
