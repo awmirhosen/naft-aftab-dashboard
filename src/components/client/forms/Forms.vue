@@ -85,14 +85,15 @@
 
 <script setup>
 import { Form} from "vee-validate";
-import {firstStepFormSchema, secondStepFormSchema} from "../../../../../validation/schemas.js";
+import {firstStepFormSchema, secondStepFormSchema} from "../../../validation/schemas.js";
 import {ref} from "vue";
 import FirstStep from "./FirstStep.vue";
 import ThirdStep from "./ThirdStep.vue";
 import SecondStep from "./SecondStep.vue";
-import {useFormsStore} from "../../../../../store/forms.js";
+import {useFormsStore} from "../../../store/forms.js";
 
-const step = ref(2);
+
+const step = ref(1);
 
 const formStore = useFormsStore();
 

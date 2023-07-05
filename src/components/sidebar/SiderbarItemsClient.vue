@@ -13,7 +13,7 @@
     </div>
     <hr class="mt-4 border-zinc-200">
     <!--    users-->
-    <div class=" mr-10 flex cursor-pointer transition-all hover:text-blue-500 mt-4">
+    <router-link to="/client/message" active-class="text-blue-500" class=" mr-10 flex cursor-pointer transition-all hover:text-blue-500 mt-4">
       <div class="flex gap-4">
         <i>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -23,7 +23,7 @@
         <p>پیام ها</p>
       </div>
 
-    </div>
+    </router-link>
     <hr class="mt-4 border-zinc-200">
     <!--    forms-->
 

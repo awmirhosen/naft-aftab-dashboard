@@ -64,7 +64,7 @@
 
 <script setup>
 import {Field, ErrorMessage, Form} from "vee-validate";
-import DynamicInput from "../../../../ui/DynamicInput.vue";
+import DynamicInput from "../../ui/DynamicInput.vue";
 import {ref} from "vue";
 
 const bussCategory = ref(3)

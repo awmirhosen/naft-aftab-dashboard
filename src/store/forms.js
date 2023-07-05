@@ -9,6 +9,8 @@ export const useFormsStore = defineStore("forms", {
                 client_bussiness_name: "",
                 client_email: "",
                 client_gender: "",
+                media: [],
+                mediaUrlArray: []
             },
             secondStepData : {
                 client_state: "",

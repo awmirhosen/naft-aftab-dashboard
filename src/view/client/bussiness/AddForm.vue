@@ -9,8 +9,10 @@
 
 <script setup>
 
-import Forms from "../../components/dashboard/main/client/forms/Forms.vue";
+import Forms from "../../../components/client/forms/Forms.vue"
+
 </script>
+
 
 <style scoped>
 

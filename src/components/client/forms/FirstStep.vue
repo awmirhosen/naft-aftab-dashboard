@@ -20,7 +20,7 @@
               <div class="col-md-5 offset-md-1">
                 <form @submit.prevent="submitMedia" enctype="multipart/form-data">
                   <div class="form-group">
-                    <input type="file" accept="image/*" @change="previewImage" class="custom-file-input" id="my-file" name="buss_doc" ref="fileInput" >
+                    <input type="file" accept="image/*" ref="upload" @change="previewImage" class="custom-file-input" id="my-file" name="buss_doc">
                     <div class=" p-2 mt-3">
                       <template v-if="preview">
                         <div class="flex justify-center gap-3 items-center">
@@ -36,6 +36,15 @@
 
                   <div class="w-full">
                     <input ref="titleInput" type="text" class="shadow-md border shadow-md w-10/12 text-sm p-2 border-zinc-300 rounded" placeholder="عنوان فایل را وارد کنید*">
+                  </div>
+
+                  <div class="w-full text-center text-blue-600 text-md" v-if="loading">
+                    در حال ارسال فایل...
+                  </div>
+
+                  <div class="w-full text-center flex justify-center gap-2 mt-4 items-center" v-if="percent > 0">
+                    <p>{{ percent }} % </p>
+                    <Loader />
                   </div>
 
                   <div class="absolute bottom-5 w-full">
@@ -132,16 +141,25 @@
     </div>
 
     <!--        file uploader-->
-    <div class="w-full mt-5" @click="openFileUploadModal">
+    <div class="w-full mt-5">
       <div class="text-center">
         <p class="mb-1">محل بارگذاری مستندات محصولات</p>
         <p class="mb-3 text-sm text-blue-600">تعداد مستندات آپلود شده میتواند بیش از یک عدد باشد و هر کدام باید همراه با
           یک عنوان باشد</p>
       </div>
-      <div
+
+      <div @click="openFileUploadModal"
           class="w-full h-full rounded border-dashed border-2 cursor-pointer bg-zinc-100 p-2 border-zinc-900 flex justify-center items-center">
         <p>برای بارگذاری فایل اینجا کلیک کنید</p>
       </div>
+
+      <div class="flex justify-center gap-4 mt-4" v-if="formsStore.firstStepData.mediaUrlArray !== []">
+        <div v-for="(media, index) in formsStore.firstStepData.mediaUrlArray" :key="index">
+          <img :src="media.url" alt="doc picture" class="h-24">
+          <div class="w-full bg-red-800 text-white text-center mt-2 rounded cursor-pointer" @click="deleteMedia" >حذف</div>
+        </div>
+      </div>
+
     </div>
 
     <div class="w-full">
@@ -160,16 +178,25 @@
 
 <script setup>
 import {Field, ErrorMessage} from "vee-validate";
-import {useFormsStore} from "../../../../../store/forms.js";
-import {ref} from "vue";
+import {useFormsStore} from "../../../store/forms.js";
+import {reactive, ref} from "vue";
+import {axios} from "../../../axios/index.js";
+import Loader from "../../ui/Loader.vue";
 
 
 const formStore = useFormsStore();
-console.log(formStore.firstStepData.client_full_name)
+
+const upload = ref(null);
+const loading = ref(false);
+
+const mediaArray = reactive([]);
+const medaiUrlArray = reactive([]);
 
 
 const formsStore = useFormsStore();
 const openFileUploadModal = () => {
+  reset();
+  formsStore.firstStepData.media = [];
   formsStore.modalFileInput = true;
 }
 
@@ -177,50 +204,90 @@ const closeFileModal = () => {
   formsStore.modalFileInput = false
 }
 
-
+// image preview variables
 const preview = ref(null);
 const image = ref(null);
 const image_list = ref(null);
-
-const fileInput = ref(null)
 const titleInput = ref(null);
+// create a form data instance
+const formData = new FormData();
+const percent = ref(0);
 
+// preview image function
 const previewImage = (e) => {
-  console.log(e.target.files);
   var input = e.target;
   if (input.files) {
     var reader = new FileReader();
     reader.onload = (e) => {
-      console.log(e.target.result)
       preview.value = e.target.result;
     }
-    console.log(input.files[0]);
     image.value = input.files[0];
     reader.readAsDataURL(input.files[0])
   }
 }
 
-
+// reset function for removing image from modal preview
 const reset = () => {
   image.value = null;
   preview.value = null;
   image_list.value = null;
   preview.value = null;
 }
+
+// title and files error variables
 const titleInputError = ref(false);
 const fileInputError = ref(false);
 
+// submit media in modal
 const submitMedia = () => {
   if (titleInput.value.value === "") {
     console.log("title is empty")
     titleInputError.value = true;
-  } else if (fileInput.value.value === "") {
-    console.log("file is empty")
+  } else if (upload.value.value === "") {
+    console.log("file is empty");
     fileInputError.value = true;
   } else {
-    fileInputError.value = false;
-    titleInputError.value = false;
+    loading.value = true;
+    if (upload.value.files) {
+      formData.append("media", upload.value.files[0]);
+      axios.post("/media", formData, {
+        onUploadProgress(e) {
+          percent.value = Math.round((e.loaded * 100) / e.total)
+          if (percent.value > 99) {
+            percent.value = 0;
+          }
+        }
+      }).then(res => {
+        loading.value = false;
+        mediaArray.push(res.data[0].media_id);
+        medaiUrlArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`})
+        axios.post("/media?action=set_media_meta", {
+          request_params : {
+            media_id: res.data[0].media_id,
+            meta_key: "media_caption",
+            meta_value: titleInput.value.value,
+          }
+        }).then(res => {
+          reset();
+          formsStore.modalFileInput = false;
+          formStore.firstStepData.media = mediaArray;
+          formsStore.firstStepData.mediaUrlArray = medaiUrlArray;
+        }).catch(err => {
+          console.log(err);
+        })
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   }
+
+  console.log(formStore.firstStepData)
+
+}
+
+const deleteMedia = () => {
+
 }
 
 </script>

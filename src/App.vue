@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import Sidebar from "./components/dashboard/sidebar/Sidebar.vue";
+import Sidebar from "./components/sidebar/Sidebar.vue";
 import {useRoute} from "vue-router";
 import {ref, watch} from "vue";
 import Login from "./view/auth/Auth.vue";

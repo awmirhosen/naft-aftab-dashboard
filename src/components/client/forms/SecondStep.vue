@@ -101,8 +101,9 @@
 <script setup>
 
 import {Field, ErrorMessage} from "vee-validate";
-import {states} from "../../../../../utils/dummy.js";
-import {useFormsStore} from "../../../../../store/forms.js";
+import {states} from "../../../utils/dummy.js";
+import {useFormsStore} from "../../../store/forms.js";
+
 
 const formStore = useFormsStore();
 
