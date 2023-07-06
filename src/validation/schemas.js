@@ -36,4 +36,5 @@ export const secondStepFormSchema = reactive({
 export const thirdFormSchema = reactive({
     bussiness_type: Yup.string().required("این فیلد الزامیست"),
     client_bussiness_subcategory: Yup.string().required("پر کردن این فیلد الزامیست"),
+    etc: Yup.string()
 })

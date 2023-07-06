@@ -5,6 +5,8 @@ export const useFormsStore = defineStore("forms", {
         return {
             modalFileInput : false,
             firstStepFiles: [],
+            thirdStepFiles:[],
+            property: [{value: "", phone: ""}],
             firstStepData : {
                 client_full_name: "",
                 client_bussiness_name: "",

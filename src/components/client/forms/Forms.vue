@@ -74,7 +74,10 @@
       <!--      step 3-->
       <Form v-if="step === 3" @submit="submitThirdForm" :validation-schema="thirdFormSchema">
         <ThirdStep/>
-        <button type="submit" class="w-full p-2 mb-3 p-2 bg-indigo-900 text-white rounded hover:bg-indigo-800">مرحله ی بعدی</button>
+        <div class="w-full text-red-600 text-center mb-3" v-if="productError">
+          حداقل دو محصول یا خدمات را باید وارد کنید
+        </div>
+        <button type="submit" class="w-full p-2 mb-3 p-2 bg-indigo-900 text-white rounded hover:bg-indigo-800">ثبت اطلاعات</button>
         <button @click.prevent="() => step = 2" class="w-full bg-zinc-300 hover:bg-zinc-400 transition-all p-2 rounded">مرحله ی قبلی</button>
       </Form>
 
@@ -91,9 +94,11 @@ import FirstStep from "./FirstStep.vue";
 import ThirdStep from "./ThirdStep.vue";
 import SecondStep from "./SecondStep.vue";
 import {useFormsStore} from "../../../store/forms.js";
+import {axios} from "../../../axios/index.js";
 
+const productError = ref(false);
 
-const step = ref(3);
+const step = ref(1);
 
 const formStore = useFormsStore();
 
@@ -112,42 +117,62 @@ const submitSecondForm = (values) => {
 
 const submitThirdForm = (values) => {
 
-  const firstStepFiles = reactive([]);
-  console.log(formStore.firstStepFiles)
-  // formStore.firstStepData.mediaUrlArray.forEach(item => {
-  //   firstStepFiles.push(item);
-  // })
+  console.log(formStore.property)
 
-  console.log(firstStepFiles)
-  const docIdArray = reactive([]);
-
-  formStore.firstStepFiles.forEach(item => {
-    docIdArray.push(item.id)
-  })
-
-
-
-  const allData = reactive({
-    request_params: {
-      bussiness_name: formStore.firstStepData.client_bussiness_name,
-      bussiness_agent: formStore.firstStepData.client_full_name,
-      bussiness_email: formStore.firstStepData.client_email,
-      agent_gender: formStore.firstStepData.client_gender,
-      bussiness_document: docIdArray,
-      bussiness_state: formStore.secondStepData.client_state,
-      bussiness_city: formStore.secondStepData.client_city,
-      bussiness_address: formStore.secondStepData.client_address,
-      bussiness_postalcode: formStore.secondStepData.client_postalcode,
-      bussiness_tel: formStore.secondStepData.client_telephone,
-      bussiness_fax: formStore.secondStepData.client_fax,
-      bussiness_type: values.bussiness_type,
-      bussiness_category: values.bussiness_category,
-      bussiness_property: formStore.property,
-      bussiness_catalog: [],
+  if (formStore.property.length < 2) {
+    productError.value = true;
+    return
+  }else {
+    const productNames = reactive([]);
+    formStore.property.forEach(item => {
+      productNames.push(item.phone)
+    })
+    const category = ref("");
+    if (values.client_bussiness_subcategory === "etc") {
+      category.value = values.etc
+    }else {
+      category.value = Number(values.client_bussiness_subcategory);
     }
-  })
 
-  console.log(allData)
+    const docIdArray = reactive([]);
+
+    formStore.firstStepFiles.forEach(item => {
+      docIdArray.push(item.id)
+    })
+
+    const catalogIdArray = reactive([]);
+    formStore.thirdStepFiles.forEach(item => {
+      catalogIdArray.push(item.id)
+    })
+
+    const allData = reactive({
+      request_params: {
+        business_name: formStore.firstStepData.client_bussiness_name,
+        business_agent: formStore.firstStepData.client_full_name,
+        business_email: formStore.firstStepData.client_email,
+        agent_gender: formStore.firstStepData.client_gender,
+        business_document: docIdArray,
+        business_state: formStore.secondStepData.client_state,
+        business_city: formStore.secondStepData.client_city,
+        business_address: formStore.secondStepData.client_address,
+        business_postal_code: formStore.secondStepData.client_postalcode,
+        business_tel: formStore.secondStepData.client_telephone,
+        business_fax: formStore.secondStepData.client_fax,
+        business_type: values.bussiness_type,
+        business_category: category.value,
+        business_property: productNames,
+        business_catalog: catalogIdArray,
+      }
+    })
+
+    axios.post("forms", allData).then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+    })
+
+  }
+
 
 
 }

@@ -137,8 +137,8 @@
         <Field name="client_gender" :value="formStore.firstStepData.client_gender" as="select"
                class="w-full p-2 border border-zinc-200 rounded shadow-md">
           <option value="" selected>لطفا جنسیت خود را انتخاب کنید</option>
-          <option value="مرد">مرد</option>
-          <option value="زن">زن</option>
+          <option value="male">مذکر</option>
+          <option value="female">مونث</option>
         </Field>
         <ErrorMessage name="client_gender" class="text-red-600 text-sm mt-2"/>
       </div>
@@ -214,7 +214,6 @@ const mediaArray = reactive([]);
 
 const formsStore = useFormsStore();
 const openFileUploadModal = () => {
-
   reset();
   formsStore.modalFileInput = true;
 }
@@ -289,7 +288,6 @@ const submitMedia = () => {
       })
     }
   }
-
 }
 
 const deleteMedia = (media_id, index) => {

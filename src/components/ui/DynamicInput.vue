@@ -4,7 +4,7 @@
       <div class="form-group w-full">
         <label class="text-gray-600 font-semibold text-lg">به دلخواه تعدادی از محصولات خود را وارد کنید</label>
         <div class="input wrapper flex items-center w-full p-2 border border-zinc-300 rounded mt-4"
-             v-for="(input, index) in phone"
+             v-for="(input, index) in formStore.property"
              :key="`phoneInput-${index}`"
         >
           <input
@@ -12,11 +12,10 @@
               v-model="input.phone"
               class="h-10 rounded-lg outline-none w-full p-3"
               placeholder=" نام محصول"
-              @change="console.log(phone)"
           />
           <!--          Add Svg Icon-->
           <svg
-              @click="addField(input, phone)"
+              @click="addField(input, formStore.property)"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width="24"
@@ -32,8 +31,8 @@
 
           <!--          Remove Svg Icon-->
           <svg
-              v-show="phone.length > 1"
-              @click="removeField(index, phone)"
+              v-show="formStore.property.length > 1"
+              @click="removeField(index, formStore.property)"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width="24"
@@ -54,18 +53,19 @@
 
 <script setup>
 
-import {ref} from "vue";
 
+import {useFormsStore} from "../../store/forms.js";
+const formStore = useFormsStore();
 
-const phone = ref([{value: "", phone: ""}])
 
 const addField = (value, fieldType) => {
   fieldType.push({ value: "" });
 };
-
 const removeField = (index, fieldType) => {
   fieldType.splice(index, 1);
 }
+
+
 
 </script>
 
