@@ -5,7 +5,7 @@
       <div class="">
         <div class="">
           <div class="">
-            <img src="../../../../public/images/ui/6569365_and_application_applications_authentication_identity_icon%20(1).svg" alt="user logo" width="70">
+            <img src="../../../public/images/ui/user_logo.svg" alt="user logo" width="70">
           </div>
         </div>
       </div>

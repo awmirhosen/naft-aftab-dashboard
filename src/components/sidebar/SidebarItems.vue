@@ -58,7 +58,7 @@
     </router-link>
     <hr class="mt-4 border-zinc-200">
     <!--      logout-->
-    <div class=" mr-10 mt-4 text-red-600 flex cursor-pointer transition-all hover:text-red-800" >
+    <div class=" mr-10 mt-4 text-red-600 flex cursor-pointer transition-all hover:text-red-800" @click="logout">
       <div class="flex gap-4">
         <i>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -81,9 +81,13 @@
 
 
 import {ref} from "vue";
+import {useAuthStore} from "../../store/auth.js";
 // items flag for oppening and closing users item
 const usersItemFlag = ref(false)
 const usersItemDropdown = ref(null);
+
+const authStore = useAuthStore();
+
 // users toggle function
 const usersSidebarToggle = () => {
   console.log(usersItemDropdown.value.style);
@@ -96,6 +100,12 @@ const usersSidebarToggle = () => {
     usersItemFlag.value = true;
     usersItemDropdown.value.style.transform = "rotateZ(180deg)"
   }
+}
+
+const logout = () => {
+  localStorage.removeItem("token");
+  clearTimeout(authStore.tokenTimer);
+  router.push("/auth")
 }
 
 

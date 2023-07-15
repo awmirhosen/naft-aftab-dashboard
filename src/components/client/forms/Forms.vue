@@ -3,51 +3,51 @@
     <!--  top bar of steps-->
     <div class="flex justify-center items-center gap-4 w-full">
       <div class="p-2 text-sm sm:text-xl whitespace-nowrap text-center">
-        <div class="h-8 w-8 rounded-full mx-auto mb-4 flex items-center justify-center border-2"
+        <div class="h-4 w-4 sm:w-8 sm:h-8 rounded-full mx-auto mb-4 flex items-center justify-center border-2"
              :class="step === 1 ? 'bg-indigo-900 border-zinc-100' : 'bg-zinc-200 border-zinc-900'"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
-               class="w-6 h-6"
+               class="w-2 h-2 sm:w-6 sm:h-6"
                :class="step === 1 ? 'text-white' : 'text-black'"
           >
             <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
           </svg>
         </div>
-        <p class="">اطلاعات کسب و کار</p>
+        <p class="text-xs sm:text-md">اطلاعات کسب و کار</p>
       </div>
-      <div class="w-full h-1 bg-zinc-300 rounded-xl"></div>
+      <div class="w-full h-1 bg-zinc-300 hidden sm:block rounded-xl"></div>
       <div class="p-2 text-sm sm:text-xl whitespace-nowrap text-center">
-        <div class="h-8 w-8 rounded-full mx-auto mb-4 flex items-center justify-center border-2"
+        <div class="h-4 w-4 sm:w-8 sm:h-8 rounded-full mx-auto mb-4 flex items-center justify-center border-2"
              :class="step === 2 ? 'bg-indigo-900 border-zinc-100' : 'bg-zinc-200 border-zinc-900'"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
-               class="w-6 h-6"
+               class="w-2 h-2 sm:w-6 sm:h-6"
                :class="step === 2 ? 'text-white' : 'text-black'"
           >
             <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
           </svg>
         </div>
-        <p class="">اطلاعات مکانی</p>
+        <p class="text-xs sm:text-md">اطلاعات مکانی</p>
       </div>
-      <div class="w-full h-1 bg-zinc-300 rounded-xl"></div>
+      <div class="w-full h-1 bg-zinc-300 hidden sm:block rounded-xl"></div>
       <div class="p-2 text-sm sm:text-xl whitespace-nowrap text-center">
-        <div class="h-8 w-8 rounded-full mx-auto mb-4 flex items-center justify-center border-2"
+        <div class="h-4 w-4 sm:w-8 sm:h-8 rounded-full mx-auto mb-4 flex items-center justify-center border-2"
              :class="step === 3 ? 'bg-indigo-900 border-zinc-100' : 'bg-zinc-200 border-zinc-900'"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor"
-               class="w-6 h-6"
+               class="w-2 h-2 sm:w-6 sm:h-6"
                :class="step === 3 ? 'text-white' : 'text-black'"
           >
             <path stroke-linecap="round" stroke-linejoin="round"
                   d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
           </svg>
         </div>
-        <p class="">محصول و خدمات</p>
+        <p class="text-xs sm:text-md">محصول و خدمات</p>
       </div>
     </div>
     <!--  end of top-->
@@ -80,8 +80,19 @@
         <button type="submit" class="w-full p-2 mb-3 p-2 bg-indigo-900 text-white rounded hover:bg-indigo-800">ثبت اطلاعات</button>
         <button @click.prevent="() => step = 2" class="w-full bg-zinc-300 hover:bg-zinc-400 transition-all p-2 rounded">مرحله ی قبلی</button>
       </Form>
-
     </div>
+    <!-- step 4 -->
+    <div class="w-full p-5 mt-4" v-if="step === 4">
+      <div class="w-full">
+        <p class="w-full text-center mt-5 text-green-600">اطلاعات شما با موفقیت ذخیره شد. برای بررسی نتایج به صفحه ی کسب و کار مراجعه کنید</p>
+        <div class="w-full text-center flex justify-center items-center mt-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-green-600">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 </template>
@@ -121,7 +132,7 @@ const submitThirdForm = (values) => {
 
   if (formStore.property.length < 2) {
     productError.value = true;
-    return
+    return;
   }else {
     const productNames = reactive([]);
     formStore.property.forEach(item => {
@@ -165,8 +176,10 @@ const submitThirdForm = (values) => {
       }
     })
 
+    console.log(allData)
+
     axios.post("forms", allData).then(res => {
-      console.log(res)
+      step.value = 4;
     }).catch(err => {
       console.log(err)
     })

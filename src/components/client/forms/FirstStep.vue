@@ -52,10 +52,13 @@
                   </div>
 
                   <div class="absolute bottom-5 w-full">
+                    <p class="text-red-600 text-sm" v-if="errMessage">{{ errMessage }}</p>
                     <p class="text-red-600 text-sm" v-if="titleInputError">وارد کردن عنوان برای فایل الزامیست</p>
                     <p class="text-red-600 text-sm" v-if="fileInputError">بارگذاری عکس الزامیست</p>
                     <button class="w-10/12 mt-2 bg-indigo-900 rounded p-1 text-white" type="submit">ثبت فایل</button>
-                    <button class="w-10/12 mt-2 bg-zinc-200 rounded p-1" @click="reset">پاک کردن فایل</button>
+                    <div class="w-10/12 mt-2 bg-zinc-200 rounded p-1 mx-auto cursor-pointer" @click="reset">پاک کردن
+                      فایل
+                    </div>
                   </div>
 
                 </form>
@@ -124,7 +127,7 @@
                    :value="formStore.firstStepData.client_email"
                    name="client_email"
                    class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                   placeholder="لطفا ایمیل کاری کسب و کار خود را وارد کنید"/>
+                   placeholder="لطفا ایمیل کاری کسب و کار خود را وارد کنید*"/>
           </div>
         </div>
         <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_email"/>
@@ -211,11 +214,11 @@ const fileInputError = ref(false);
 const mediaArray = reactive([]);
 
 
-
 const formsStore = useFormsStore();
 const openFileUploadModal = () => {
   reset();
   formsStore.modalFileInput = true;
+  errMessage.value = false;
 }
 
 const closeFileModal = () => {
@@ -227,25 +230,37 @@ const closeFileModal = () => {
 const previewImage = (e) => {
   var input = e.target;
   if (input.files) {
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      preview.value = e.target.result;
+    if (Math.floor(input.files[0].size / 1024) > 1000) {
+      errMessage.value = "فایل ارسالی بیش از یک مگابایت است"
+    } else {
+      errMessage.value = false;
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        preview.value = e.target.result;
+      }
+      image.value = input.files[0];
+      reader.readAsDataURL(input.files[0])
     }
-    image.value = input.files[0];
-    reader.readAsDataURL(input.files[0])
   }
 }
 
 // reset function for removing image from modal preview
 const reset = () => {
+  errMessage.value = false;
   image.value = null;
   preview.value = null;
   image_list.value = null;
   preview.value = null;
+  if (upload.value) {
+    upload.value = null;
+    console.log(upload.value)
+  }
 }
 
+const errMessage = ref(false);
 
 
+// submit media in modal
 // submit media in modal
 const submitMedia = () => {
   if (titleInput.value.value === "") {
@@ -255,37 +270,43 @@ const submitMedia = () => {
     console.log("file is empty");
     fileInputError.value = true;
   } else {
-    loading.value = true;
+
     if (upload.value.files) {
-      formData.append("media", upload.value.files[0]);
-      axios.post("/media", formData, {
-        onUploadProgress(e) {
-          percent.value = Math.round((e.loaded * 100) / e.total)
-          if (percent.value > 99) {
-            percent.value = 0;
-          }
-        }
-      }).then(res => {
-        loading.value = false;
-        mediaArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
-        axios.post("/media?action=set_media_meta", {
-          request_params: {
-            media_id: res.data[0].media_id,
-            meta_key: "media_caption",
-            meta_value: titleInput.value.value,
+      if (Math.floor(upload.value.files[0].size / 1024) > 1000) {
+        upload.value = "";
+      } else {
+        loading.value = true;
+        formData.append("media", upload.value.files[0]);
+        axios.post("/media", formData, {
+          onUploadProgress(e) {
+            percent.value = Math.round((e.loaded * 100) / e.total)
+            if (percent.value > 99) {
+              percent.value = 0;
+            }
           }
         }).then(res => {
-          reset();
-          formsStore.modalFileInput = false;
-          formStore.firstStepData.media = mediaArray;
-          formsStore.firstStepFiles = mediaArray;
+          loading.value = false;
+          mediaArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
+          axios.post("/media?action=set_media_meta", {
+            request_params: {
+              media_id: res.data[0].media_id,
+              meta_key: "media_caption",
+              meta_value: titleInput.value.value,
+            }
+          }).then(res => {
+            reset();
+            formsStore.modalFileInput = false;
+            formStore.firstStepData.media = mediaArray;
+            formsStore.firstStepFiles = mediaArray;
+          }).catch(err => {
+            console.log(err);
+          })
+          console.log(res)
         }).catch(err => {
-          console.log(err);
+          errMessage.value = "مشکلی در آپلود بوجود آمده"
+          console.log(err)
         })
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      }
     }
   }
 }

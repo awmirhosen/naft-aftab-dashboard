@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import {axios} from "../axios/index.js";
+import router from "../router/index.js";
 
 
 const usersError = [
@@ -28,20 +29,38 @@ const loginError = [
 export const useAuthStore = defineStore("auth", {
     state: () => {
         return {
+            sidebarFlag : false,
+            jwtEncodeData: {},
+            userInfo: {
+                user_id: "",
+                user_role: "",
+                user_fullname: "",
+            },
             loginCounterFlag: false,
+            authFlag: false,
+            userRole: 1,
             authStatus: "login",
             stepSignup: 1,
             stepLogin: 1,
             signupError: null,
             otpvalue: null,
+            tokenTimer: null,
         }
     },
     actions: {
-        otpSubmit(data, loading) {
-            axios.post("auth?method=verify_mobile", data).then(res => {
+        async otpSubmit(data, loading) {
+            await axios.post("auth?method=verify_mobile", data).then(res => {
                 console.log(res.data.jwt_token)
-                localStorage.setItem("token", res.data.jwt_token)
-                this.router.push("/");
+                localStorage.setItem("token", res.data.jwt_token);
+                this.clearTokenTime();
+                this.jwtEncode(localStorage.getItem("token"));
+                console.log(this.userInfo)
+                if (this.userInfo.user_role === "customer") {
+                    router.push("/bussiness");
+                }else if (this.userInfo.user_role === "admin") {
+                    router.push("/admin");
+                }
+                this.authFlag = true;
                 loading.value = false;
             }).catch(err => {
                 console.log(err);
@@ -51,15 +70,23 @@ export const useAuthStore = defineStore("auth", {
                 } else if (err.response.data.error_code === "token_otp_is_expire") {
                     this.signupError = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
                     loading.value = false;
-                }else {
+                } else {
                     this.signupError = "در ارتباط با سرور مشکلی پیش آمده لطفا در زمان دیگری امتحان کنید"
                 }
             })
         },
-        loginUser(loginOtpData, loading) {
-            axios.post("auth?method=verify_mobile", loginOtpData).then(res => {
-                localStorage.setItem("token", res.data.jwt_token)
-                this.router.push("/");
+        async loginUser(loginOtpData, loading) {
+            await axios.post("auth?method=verify_mobile", loginOtpData).then(res => {
+                console.log("set item local")
+                localStorage.setItem("token", res.data.jwt_token);
+                this.clearTokenTime();
+                this.jwtEncode(localStorage.getItem("token"));
+                console.log(this.userInfo)
+                if (this.userInfo.user_role === "customer") {
+                    router.push("/bussiness");
+                }else if (this.userInfo.user_role === "admin") {
+                    router.push("/admin");
+                }
                 loading.value = false;
             }).catch(err => {
                 console.log(err);
@@ -69,21 +96,29 @@ export const useAuthStore = defineStore("auth", {
                 } else if (err.response.data.error_code === "token_otp_is_expire") {
                     this.signupError = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
                     loading.value = false;
-                }else if (err.response.data.error_code === "mobile_is_already_confirmed") {
+                } else if (err.response.data.error_code === "mobile_is_already_confirmed") {
                     axios.post("auth?method=sign_in_with_token", loginOtpData).then(res => {
                         console.log(res)
-                        this.router.push("/");
+                        localStorage.setItem("token", res.data.jwt_token);
+                        this.clearTokenTime();
+                        this.jwtEncode(localStorage.getItem("token"));
+                        console.log(this.userInfo)
+                        if (this.userInfo.user_role === "customer") {
+                            router.push("/bussiness");
+                        }else if (this.userInfo.user_role === "admin") {
+                            router.push("/admin");
+                        }
+                        loading.value = false;
                     }).catch(err => {
                         console.log(err)
                     })
-                }
-                else {
+                } else {
                     this.signupError = "در ارتباط با سرور مشکلی پیش آمده لطفا در زمان دیگری امتحان کنید"
                 }
             })
         },
-        signupUser(data, loading, otpData) {
-            console.log(otpData)
+        async signupUser(data, loading, otpData) {
+            await console.log(otpData)
             this.signupError = null;
             axios.post("/auth?method=sign_up", data).then(res => {
                 console.log(res);
@@ -103,8 +138,8 @@ export const useAuthStore = defineStore("auth", {
                 })
             })
         },
-        sendMobileToken(otpData, loading) {
-            axios.post("auth?method=send_mobile_token", otpData, {
+        async sendMobileToken(otpData, loading) {
+            await axios.post("auth?method=send_mobile_token", otpData, {
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -117,11 +152,34 @@ export const useAuthStore = defineStore("auth", {
                 console.log(err.response.data.error_code)
                 if (err.response.data.error_code === "user_login_not_exist") {
                     this.signupError = "این شماره همراه در سیستم موجود نمیباشد، لطفا ثبت نام کنید"
-                }else {
+                    this.authStatus = "signup";
+                } else {
                     this.signupError = "مشکلی در ارسال پیام پیش آمده"
                     loading.value = false;
                 }
             })
+        },
+        jwtEncode(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const decodedToken = JSON.parse(window.atob(base64));
+
+            this.userInfo.user_id = decodedToken.user_id;
+            console.log(decodedToken.role.customer)
+            if (decodedToken.role.customer) {
+                console.log("customer")
+                this.userInfo.user_role = "customer"
+            }else {
+                console.log("admin")
+                this.userInfo.user_role = "admin"
+            }
+
+            console.log(decodedToken);
+        },
+        clearTokenTime() {
+            this.tokenTimer = setTimeout(() => {
+                localStorage.removeItem("token")
+            }, 7200000)
         }
     }
 })

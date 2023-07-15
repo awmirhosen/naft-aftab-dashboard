@@ -2,7 +2,7 @@
   <div class="w-[30rem] rounded-md p-3">
     <!--    logo for login layout-->
     <div class="w-100 flex justify-center">
-      <img src="public/images/ui/naftaftab_logo.png" width="120" alt="Company Logo">
+      <img src="../../../public/images/ui/naftaftab_logo.png" width="120" alt="Company Logo">
     </div>
 
     <div class="w-100 h-100" v-if="authStore.stepSignup === 1">
@@ -131,6 +131,7 @@ import OTPPad from "../ui/OTPPad.vue";
 import Countdown from "../ui/Countdown.vue";
 import {ref} from "vue";
 import Loader from "../ui/Loader.vue";
+import router from "../../router/index.js";
 const loading = ref(false);
 // calling auth store in pinia
 const authStore = useAuthStore();
@@ -164,6 +165,7 @@ const submitOtp = () => {
       token : authStore.otpvalue,
     }
   }
+
   authStore.otpSubmit(data, loading);
 }
 

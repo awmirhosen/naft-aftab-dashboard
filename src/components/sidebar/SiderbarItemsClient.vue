@@ -28,7 +28,7 @@
     <!--    forms-->
 
     <!--      logout-->
-    <div class=" mr-10 mt-4 text-blue-800 flex cursor-pointer transition-all hover:text-blue-500">
+    <div class=" mr-10 mt-4 text-blue-800 flex cursor-pointer transition-all hover:text-blue-500" @click="logoutUser">
       <div class="flex gap-4">
         <i>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -50,6 +50,12 @@
 
 
 import {ref} from "vue";
+import {useRouter} from "vue-router";
+
+
+//// useRouter
+const router = useRouter();
+
 // items flag for oppening and closing users item
 const usersItemFlag = ref(false)
 const usersItemDropdown = ref(null);
@@ -82,6 +88,11 @@ const productSidebarToggle = () => {
     ProducstItemFlag.value = true;
     ProductsItemDropdown.value.style.transform = "rotateZ(180deg)"
   }
+}
+
+const logoutUser = () => {
+  localStorage.removeItem("token");
+  router.push("/auth");
 }
 
 </script>

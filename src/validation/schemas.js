@@ -20,7 +20,7 @@ export const firstStepFormSchema = reactive({
     client_full_name: Yup.string().required("این فیلد الزامیست"),
     client_bussiness_name: Yup.string().required("این فیلد الزامیست"),
     client_phone: Yup.string().required("این فیلد اجباریست"),
-    client_email: Yup.string().email("فرمت وارد شده صحیح نیست"),
+    client_email: Yup.string().required("پر کردن این فیلد الزامیست").email("فرمت وارد شده صحیح نیست"),
     client_gender: Yup.string().required("انتخاب این فیلد الزامیست"),
 })
 

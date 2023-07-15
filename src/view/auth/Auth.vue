@@ -11,7 +11,6 @@
 import Login from "../../components/auth/Login.vue";
 import Signup from "../../components/auth/Signup.vue";
 import {useAuthStore} from "../../store/auth.js";
-import Loader from "../../components/ui/Loader.vue";
 
 const authStore = useAuthStore();
 

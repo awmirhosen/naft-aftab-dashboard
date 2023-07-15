@@ -6,7 +6,7 @@
 
     <div class="w-full mt-4 flex-col">
       <div class="flex items-center gap-3">
-        <img src="../../../../../public/images/ui/admin_icon.svg" width="30" alt="user pic">
+        <img src="../../../../public/images/ui/admin_icon.svg" width="30" alt="user pic">
         <div class="flex  flex-col justify-center bg-zinc-100 rounded p-1">
           <p class="w-full text-center">1402/5/1</p>
           <p class="w-full text-center">12:34</p>

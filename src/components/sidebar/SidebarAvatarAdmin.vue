@@ -5,7 +5,7 @@
     <div class="">
       <div class="">
         <div class="">
-          <img src="../../../../public/images/ui/admin_icon.svg" alt="user logo" width="50">
+          <img src="../../../public/images/ui/admin_icon.svg" alt="user logo" width="50">
         </div>
       </div>
     </div>

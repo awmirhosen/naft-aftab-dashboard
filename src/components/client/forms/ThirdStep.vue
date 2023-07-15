@@ -48,10 +48,11 @@
 
 
                 <div class="absolute bottom-5 w-full">
+                  <p class="text-red-600 text-sm" v-if="errMessage">{{ errMessage }}</p>
                   <p class="text-red-600 text-sm" v-if="titleInputError">وارد کردن عنوان برای فایل الزامیست</p>
                   <p class="text-red-600 text-sm" v-if="fileInputError">بارگذاری عکس الزامیست</p>
                   <button class="w-10/12 mt-2 bg-indigo-900 rounded p-1 text-white" type="submit">ثبت فایل</button>
-                  <button class="w-10/12 mt-2 bg-zinc-200 rounded p-1" @click="reset">پاک کردن فایل</button>
+                  <div class="mx-auto cursor-pointer w-10/12 mt-2 bg-zinc-200 rounded p-1" @click="reset">پاک کردن فایل</div>
                 </div>
 
               </form>
@@ -70,8 +71,8 @@
       <div class="flex gap-3">
         <div class="w-full">
           <Field name="bussiness_type" as="select" class="w-full bg-zinc-100 p-3 rounded"
-                  @change="onchangeBussinesCategory">
-            <option value="" selected >انتخاب نوع کسب و کار</option>
+                 @change="onchangeBussinesCategory">
+            <option value="" selected>انتخاب نوع کسب و کار</option>
             <option value="service">خدمات</option>
             <option value="product">کالا</option>
           </Field>
@@ -84,15 +85,16 @@
 
         <div class="w-full" v-if="bussCategory === 3">
           <Field name="client_bussiness_subcategory" as="select" class="w-full bg-zinc-100 p-3 rounded">
-            <option value="" selected >اول نوع کسب و کار را مشخص کنید</option>
+            <option value="" selected>اول نوع کسب و کار را مشخص کنید</option>
           </Field>
-          <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_bussiness_subcategory"/>
+          <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right"
+                        name="client_bussiness_subcategory"/>
         </div>
 
         <div v-if="bussCategory === 1">
           <Field name="client_bussiness_subcategory" as="select" class="w-full bg-zinc-100 p-3 rounded"
-                  @change="subcategoryChange">
-            <option value="" selected >دسته بندی کالا</option>
+                 @change="subcategoryChange">
+            <option value="" selected>دسته بندی کالا</option>
             <option value="1">تکنولوژی</option>
             <option value="2">ساختمان</option>
             <option value="etc">سایر</option>
@@ -103,8 +105,8 @@
 
         <div v-if="bussCategory === 2">
           <Field as="select" name="client_bussiness_subcategory" class="w-full bg-zinc-100 p-3 rounded"
-                  @change="subcategoryChange">
-            <option value="" selected >دسته بندی خدمات</option>
+                 @change="subcategoryChange">
+            <option value="" selected>دسته بندی خدمات</option>
             <option value="1">تکنولوژی</option>
             <option value="2">ساختمان</option>
             <option value="etc">سایر</option>
@@ -169,6 +171,8 @@ import {axios} from "../../../axios/index.js";
 
 const bussCategory = ref(3)
 const bussSubcategory = ref(false);
+// error message for upload
+const errMessage = ref(false);
 // image preview variables
 const preview = ref(null);
 const image = ref(null);
@@ -198,12 +202,17 @@ const closeFileModal = () => {
 const previewImage = (e) => {
   var input = e.target;
   if (input.files) {
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      preview.value = e.target.result;
+    if (Math.floor(input.files[0].size / 1024) > 1000) {
+      errMessage.value = "فایل ارسالی بیش از یک مگابایت است"
+    } else {
+      errMessage.value = false;
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        preview.value = e.target.result;
+      }
+      image.value = input.files[0];
+      reader.readAsDataURL(input.files[0])
     }
-    image.value = input.files[0];
-    reader.readAsDataURL(input.files[0])
   }
 }
 
@@ -213,6 +222,7 @@ const reset = () => {
   preview.value = null;
   image_list.value = null;
   preview.value = null;
+  upload.value = null;
 }
 
 const submitMedia = () => {
@@ -223,29 +233,42 @@ const submitMedia = () => {
     console.log("file is empty");
     fileInputError.value = true;
   } else {
-    loading.value = true;
+
     if (upload.value.files) {
-      formData.append("media", upload.value.files[0]);
-      axios.post("/media", formData).then(res => {
-        loading.value = false;
-        mediaArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
-        axios.post("/media?action=set_media_meta", {
-          request_params: {
-            media_id: res.data[0].media_id,
-            meta_key: "media_caption",
-            meta_value: titleInput.value.value,
+      if (Math.floor(upload.value.files[0].size / 1024) > 1000) {
+        upload.value = "";
+      } else {
+        loading.value = true;
+        formData.append("media", upload.value.files[0]);
+        axios.post("/media", formData, {
+          onUploadProgress(e) {
+            percent.value = Math.round((e.loaded * 100) / e.total)
+            if (percent.value > 99) {
+              percent.value = 0;
+            }
           }
         }).then(res => {
-          reset();
-          formsStore.modalFileInput = false;
-          formsStore.thirdStepFiles = mediaArray;
+          loading.value = false;
+          mediaArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
+          axios.post("/media?action=set_media_meta", {
+            request_params: {
+              media_id: res.data[0].media_id,
+              meta_key: "media_caption",
+              meta_value: titleInput.value.value,
+            }
+          }).then(res => {
+            reset();
+            formsStore.modalFileInput = false;
+            formsStore.thirdStepFiles = mediaArray;
+          }).catch(err => {
+            console.log(err);
+          })
+          console.log(res)
         }).catch(err => {
-          console.log(err);
+          errMessage.value = "مشکلی در آپلود بوجود آمده"
+          console.log(err)
         })
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      }
     }
   }
 }
@@ -254,7 +277,6 @@ const deleteMedia = (media_id, index) => {
   console.log(mediaArray[0]);
   mediaArray.splice(index, 1);
   formsStore.secondStepData = mediaArray;
-  console.log("pinia,", formsStore.firstStepFiles)
 }
 
 const subcategoryChange = (e) => {

@@ -29,7 +29,7 @@
     </div>
     <div class="flex mt-5 gap-3 items-center">
       <div>
-        <img src="public/images/ui/admin_icon.svg" width="40" alt="avatar admin">
+        <img src="../../../public/images/ui/admin_icon.svg" width="40" alt="avatar admin">
       </div>
       <div class="p-5 inline-block bg-indigo-900 text-white rounded-xl flex">
         با استفاده از قسمت بارگذاری فایل در فورم شما میتوانید فایل های مورد نیاز خود در قسمت های مشخص شده را همراه با عنوان وارد کنید
