@@ -38,13 +38,18 @@
 <script setup>
 
 import {axios} from "../../../axios/index.js";
+import router from "../../../router/index.js";
+import {useFormsStore} from "../../../store/forms.js";
 
+const formStore = useFormsStore();
 
-axios.get("/forms").then(res => {
-  console.log(res)
-}).catch(err => {
-  console.log(err);
-})
+const fetchForm = () => {
+  if (localStorage.getItem("token") === null) {
+    fetchForm();
+  }else {
+    formStore.fetchFormsData();
+  }
+}
 
 
 </script>

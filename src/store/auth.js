@@ -29,7 +29,8 @@ const loginError = [
 export const useAuthStore = defineStore("auth", {
     state: () => {
         return {
-            sidebarFlag : false,
+            sidebarFlag: false,
+            loginErrors: null,
             jwtEncodeData: {},
             userInfo: {
                 user_id: "",
@@ -57,7 +58,7 @@ export const useAuthStore = defineStore("auth", {
                 console.log(this.userInfo)
                 if (this.userInfo.user_role === "customer") {
                     router.push("/bussiness");
-                }else if (this.userInfo.user_role === "admin") {
+                } else if (this.userInfo.user_role === "admin") {
                     router.push("/admin");
                 }
                 this.authFlag = true;
@@ -70,6 +71,8 @@ export const useAuthStore = defineStore("auth", {
                 } else if (err.response.data.error_code === "token_otp_is_expire") {
                     this.signupError = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
                     loading.value = false;
+                } else if (err.response.data.code === 401) {
+                    localStorage.removeItem("token");
                 } else {
                     this.signupError = "در ارتباط با سرور مشکلی پیش آمده لطفا در زمان دیگری امتحان کنید"
                 }
@@ -84,7 +87,7 @@ export const useAuthStore = defineStore("auth", {
                 console.log(this.userInfo)
                 if (this.userInfo.user_role === "customer") {
                     router.push("/bussiness");
-                }else if (this.userInfo.user_role === "admin") {
+                } else if (this.userInfo.user_role === "admin") {
                     router.push("/admin");
                 }
                 loading.value = false;
@@ -92,6 +95,7 @@ export const useAuthStore = defineStore("auth", {
                 console.log(err);
                 if (err.response.data.error_code === "token_otp_not_valid") {
                     this.signupError = "کد وارد شده صحیح نمی باشد"
+                    console.log("this")
                     loading.value = false;
                 } else if (err.response.data.error_code === "token_otp_is_expire") {
                     this.signupError = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
@@ -104,14 +108,23 @@ export const useAuthStore = defineStore("auth", {
                         this.jwtEncode(localStorage.getItem("token"));
                         console.log(this.userInfo)
                         if (this.userInfo.user_role === "customer") {
-                            router.push("/bussiness");
-                        }else if (this.userInfo.user_role === "admin") {
+                             router.push("/bussiness");
+                        } else if (this.userInfo.user_role === "admin") {
                             router.push("/admin");
                         }
                         loading.value = false;
                     }).catch(err => {
-                        console.log(err)
+                        if (err.response.data.error_code === "token_otp_not_valid") {
+                            this.loginErrors = "کد وارد شده صحیح نمی باشد"
+                            console.log("this")
+                            loading.value = false;
+                        } else if (err.response.data.error_code === "token_otp_is_expire") {
+                            this.loginErrors = "زمان ارسال کد به پایان رسیده لطفا دوباره امتحان کنید"
+                            loading.value = false;
+                        }
                     })
+                } else if (err.response.data.code === 401) {
+                    localStorage.removeItem("token");
                 } else {
                     this.signupError = "در ارتباط با سرور مشکلی پیش آمده لطفا در زمان دیگری امتحان کنید"
                 }
@@ -129,7 +142,10 @@ export const useAuthStore = defineStore("auth", {
                 loading.value = false;
                 if (err.response.data.code > 499) {
                     this.signupError = "مشکلی در ارتباط با سرور پیش آمده است"
+                } else if (err.response.data.code === 401) {
+                    localStorage.removeItem("token");
                 }
+
                 usersError.forEach(item => {
                     if (item.en === err.response.data.error_code) {
                         console.log(item.fa);
@@ -153,6 +169,8 @@ export const useAuthStore = defineStore("auth", {
                 if (err.response.data.error_code === "user_login_not_exist") {
                     this.signupError = "این شماره همراه در سیستم موجود نمیباشد، لطفا ثبت نام کنید"
                     this.authStatus = "signup";
+                } else if (err.response.data.code === 401) {
+                    localStorage.removeItem("token");
                 } else {
                     this.signupError = "مشکلی در ارسال پیام پیش آمده"
                     loading.value = false;
@@ -169,7 +187,7 @@ export const useAuthStore = defineStore("auth", {
             if (decodedToken.role.customer) {
                 console.log("customer")
                 this.userInfo.user_role = "customer"
-            }else {
+            } else {
                 console.log("admin")
                 this.userInfo.user_role = "admin"
             }

@@ -72,7 +72,7 @@
         <div class="w-full">
           <Field name="bussiness_type" as="select" class="w-full bg-zinc-100 p-3 rounded"
                  @change="onchangeBussinesCategory">
-            <option value="" selected>انتخاب نوع کسب و کار</option>
+            <option value="" selected>*انتخاب نوع کسب و کار</option>
             <option value="service">خدمات</option>
             <option value="product">کالا</option>
           </Field>
@@ -85,7 +85,7 @@
 
         <div class="w-full" v-if="bussCategory === 3">
           <Field name="client_bussiness_subcategory" as="select" class="w-full bg-zinc-100 p-3 rounded">
-            <option value="" selected>اول نوع کسب و کار را مشخص کنید</option>
+            <option value="" selected>*اول نوع کسب و کار را مشخص کنید</option>
           </Field>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right"
                         name="client_bussiness_subcategory"/>
@@ -94,7 +94,7 @@
         <div v-if="bussCategory === 1">
           <Field name="client_bussiness_subcategory" as="select" class="w-full bg-zinc-100 p-3 rounded"
                  @change="subcategoryChange">
-            <option value="" selected>دسته بندی کالا</option>
+            <option value="" selected>*دسته بندی کالا</option>
             <option value="1">تکنولوژی</option>
             <option value="2">ساختمان</option>
             <option value="etc">سایر</option>
@@ -138,7 +138,10 @@
         <div class="text-center">
           <p class="mb-1">محل بارگذاری کاتالوگ یا عکس محصولات</p>
           <p class="mb-3 text-sm text-blue-600">
-            تعداد محصولات میتواند بیشتر از یک عدد باشد و حداکثر حجم عکس میتواند 1 مگابایت باشذ
+            تعداد محصولات میتواند بیشتر از یک عدد باشد و حداکثر حجم عکس میتواند 1 مگابایت باشد
+          </p>
+          <p class="mb-3 text-sm text-zinc-700">
+            پر کردن این فیلد اجباری <span class="text-red-600"> نمی باشد </span>
           </p>
         </div>
 

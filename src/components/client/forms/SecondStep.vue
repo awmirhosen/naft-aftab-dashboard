@@ -9,7 +9,7 @@
               dir="rtl">
             <div class="w-full">
               <Field name="client_state" as="select" class="w-full p-2" :value="formStore.secondStepData.client_state">
-                <option value="" :disabled="true" selected>استان محل کسب و کار خود را انتخاب کنید*</option>
+                <option value="" :disabled="true" selected>*استان محل کسب و کار خود را انتخاب کنید</option>
                 <option v-for="(state, index) in states" :key="index" :value="state.state" class="p-2">
                   {{ state.state }}
                 </option>
@@ -28,7 +28,7 @@
                      :value="formStore.secondStepData.client_city"
                      name="client_city"
                      class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                     placeholder="نام شهر کسب و کار*"/>
+                     placeholder="*نام شهر کسب و کار"/>
             </div>
           </div>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_city"/>
@@ -39,7 +39,7 @@
     <div class="w-full">
       <Field as="textArea" name="client_address" :value="formStore.secondStepData.client_address"
              class="w-full shadow-md rounded p-2 h-24 border border-zinc-200"
-             placeholder="ادرس دقیق محل کسب و کار را وارد کنید*"/>
+             placeholder="*ادرس دقیق محل کسب و کار را وارد کنید"/>
       <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_address"/>
     </div>
 
@@ -56,7 +56,7 @@
                      :value="formStore.secondStepData.client_postalcode"
                      name="client_postalcode"
                      class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                     placeholder="کد پستی محل کسب و کار را وارد کنید *"/>
+                     placeholder="* کد پستی محل کسب و کار را وارد کنید"/>
             </div>
           </div>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_postalcode"/>
@@ -71,7 +71,7 @@
                      :value="formStore.secondStepData.client_telephone"
                      name="client_telephone"
                      class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                     placeholder="تلفن ثابت محل کسب و کار را همراه با کد شهر وارد کنید *"/>
+                     placeholder="* تلفن ثابت محل کسب و کار را همراه با کد شهر وارد کنید"/>
             </div>
           </div>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_telephone"/>

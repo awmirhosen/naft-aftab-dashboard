@@ -83,6 +83,7 @@
     </div>
     <!-- step 4 -->
     <div class="w-full p-5 mt-4" v-if="step === 4">
+
       <div class="w-full">
         <p class="w-full text-center mt-5 text-green-600">اطلاعات شما با موفقیت ذخیره شد. برای بررسی نتایج به صفحه ی کسب و کار مراجعه کنید</p>
         <div class="w-full text-center flex justify-center items-center mt-4">
@@ -92,7 +93,6 @@
         </div>
       </div>
     </div>
-
 
   </div>
 </template>
@@ -109,7 +109,7 @@ import {axios} from "../../../axios/index.js";
 
 const productError = ref(false);
 
-const step = ref(1);
+const step = ref(3);
 
 const formStore = useFormsStore();
 
@@ -119,7 +119,6 @@ const submitFirstStepForm = (values) => {
   console.log(formStore.firstStepFiles)
   step.value = 2;
 }
-
 
 const submitSecondForm = (values) => {
   formStore.secondStepData = values
@@ -132,7 +131,6 @@ const submitThirdForm = (values) => {
 
   if (formStore.property.length < 2) {
     productError.value = true;
-    return;
   }else {
     const productNames = reactive([]);
     formStore.property.forEach(item => {
@@ -148,7 +146,7 @@ const submitThirdForm = (values) => {
     const docIdArray = reactive([]);
 
     formStore.firstStepFiles.forEach(item => {
-      docIdArray.push(item.id)
+      docIdArray.push(item.id);
     })
 
     const catalogIdArray = reactive([]);
@@ -178,10 +176,17 @@ const submitThirdForm = (values) => {
 
     console.log(allData)
 
+    const errMessage = ref(false);
+
     axios.post("forms", allData).then(res => {
       step.value = 4;
     }).catch(err => {
       console.log(err)
+      if (err.response.data.code === 401){
+        localStorage.removeItem("token");
+      }else {
+        errMessage.value = "مشکلی در ارتباط با سرور پیش آمده"
+      }
     })
 
   }

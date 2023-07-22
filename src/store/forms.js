@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import {axios} from "../axios/index.js";
+import router from "../router/index.js";
 
 
 export const useFormsStore = defineStore("forms", {
@@ -65,6 +66,17 @@ export const useFormsStore = defineStore("forms", {
             preview.value = null;
             image_list.value = null;
             preview.value = null;
+        },
+        fetchFormsData() {
+            axios.get("/forms").then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log(err);
+                if (err.response.data.code === 401) {
+                    localStorage.removeItem("token");
+                    router.push("/auth")
+                }
+            })
         }
     }
 });

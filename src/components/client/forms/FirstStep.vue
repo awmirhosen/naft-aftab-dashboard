@@ -82,7 +82,7 @@
                    :value="formStore.firstStepData.client_full_name"
                    name="client_full_name"
                    class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                   placeholder="نام کسب و کار*"/>
+                   placeholder="* نام کسب و کار"/>
           </div>
         </div>
         <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_full_name"/>
@@ -96,7 +96,7 @@
                    :value="formStore.firstStepData.client_bussiness_name"
                    name="client_bussiness_name"
                    class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                   placeholder="نام و نام خانوادگی نماینده کسب و کار *"/>
+                   placeholder=" * نام و نام خانوادگی نماینده کسب و کار"/>
           </div>
         </div>
         <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_bussiness_name"/>
@@ -114,7 +114,7 @@
                    :disabled="true"
                    name="client_phone"
                    class="w-full h-12 px-4 py-1 text-gray-400 bg-zinc-200 focus:outline-none"
-                   placeholder="تلفن همراه*"/>
+                   placeholder="* تلفن همراه"/>
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@
                    :value="formStore.firstStepData.client_email"
                    name="client_email"
                    class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                   placeholder="لطفا ایمیل کاری کسب و کار خود را وارد کنید*"/>
+                   placeholder="* لطفا ایمیل کاری کسب و کار خود را وارد کنید"/>
           </div>
         </div>
         <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_email"/>
@@ -139,7 +139,7 @@
       <div class="w-full">
         <Field name="client_gender" :value="formStore.firstStepData.client_gender" as="select"
                class="w-full p-2 border border-zinc-200 rounded shadow-md">
-          <option value="" selected>لطفا جنسیت خود را انتخاب کنید</option>
+          <option value="" selected>* لطفا جنسیت خود را انتخاب کنید</option>
           <option value="male">مذکر</option>
           <option value="female">مونث</option>
         </Field>
@@ -155,6 +155,9 @@
         <p class="mb-1">محل بارگذاری مستندات محصولات</p>
         <p class="mb-3 text-sm text-blue-600">تعداد مستندات آپلود شده میتواند بیش از یک عدد باشد و هر کدام باید همراه با
           یک عنوان باشد</p>
+        <p class="mb-3 text-sm text-zinc-800">
+          این فیلد اجباری <span class="text-red-600">نمیباشد</span>
+        </p>
       </div>
 
       <div @click="openFileUploadModal"
