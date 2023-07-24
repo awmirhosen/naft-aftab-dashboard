@@ -7,13 +7,13 @@ export default defineConfig({
       vue(),
   ],
   server : {
-    open: "https://donfilm.net",
+    open: "https://demo.aftabor.com",
     proxy : {
       "/api/v1" : {
-        target : "https://donfilm.net",
+        target : "https://demo.aftabor.com",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api\/v1/, "https://donfilm.net/api/v1")
+        // rewrite: (path) => path.replace(/^\/api\/v1/, "https://demo.aftabor.com")
       },
     }
   },

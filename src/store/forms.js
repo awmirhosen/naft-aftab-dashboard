@@ -7,6 +7,7 @@ export const useFormsStore = defineStore("forms", {
     state: () => {
         return {
             modalFileInput: false,
+            formsData: [],
             firstStepFiles: [],
             thirdStepFiles: [],
             property: [{value: "", phone: ""}],
@@ -31,7 +32,7 @@ export const useFormsStore = defineStore("forms", {
             await axios.post("/media", formData).then(res => {
                 loading.value = false;
                 mediaArray.push({
-                    url: `https://donfilm.net/uploads/${res.data[0].media_link}`,
+                    url: `https://demo.aftabor.com/uploads/${res.data[0].media_link}`,
                     id: res.data[0].media_id
                 })
                 this.mediaMeta(res.data[0].media_id, title, mediaArray)
@@ -67,14 +68,18 @@ export const useFormsStore = defineStore("forms", {
             image_list.value = null;
             preview.value = null;
         },
-        fetchFormsData() {
-            axios.get("/forms").then(res => {
+        async fetchFormsData() {
+            await axios.get("/forms").then(res => {
                 console.log(res)
+                this.formsData = res.data.result
+                console.log(res.data.result)
             }).catch(err => {
                 console.log(err);
                 if (err.response.data.code === 401) {
                     localStorage.removeItem("token");
-                    router.push("/auth")
+                    router.push("/auth");
+                }else if (err.response.data.code === 404 ) {
+                    this.formsData = null
                 }
             })
         }

@@ -109,7 +109,7 @@ import {axios} from "../../../axios/index.js";
 
 const productError = ref(false);
 
-const step = ref(3);
+const step = ref(1);
 
 const formStore = useFormsStore();
 

@@ -3,16 +3,16 @@
     <p class="text-xl mb-3">درخواست های کاربران</p>
     <div class="w-full flex justify-center gap-5">
       <div class="p-5 w-full bg-blue-200 shadow-md h-24 flex justify-center items-center rounded">
-        <p>54 درخواست برای شما ارسال شده</p>
+        <p>{{ formStore.formsData.length }} فرم ثبت شده</p>
       </div>
       <div class="p-5 w-full bg-amber-200 shadow-md h-24 flex justify-center items-center rounded">
-        <p>27 فرم در انتظار بررسی هستند</p>
+        <p>{{ waitingCount }} فرم در انتظار بررسی هستند</p>
       </div>
       <div class="p-5 w-full bg-green-200 shadow-md h-24 flex justify-center items-center rounded">
-        <p>10 فرم مورد بررسی شما قرار گرفته اند</p>
+        <p>0 فرم مورد بررسی شما قرار گرفته اند</p>
       </div>
       <div class="p-5 w-full bg-red-300 shadow-md h-24 flex justify-center items-center rounded">
-        <p> 2 فرم دارای نقص فنی میباشند</p>
+        <p> 0 فرم دارای نقص فنی میباشند</p>
       </div>
     </div>
   </div>
@@ -43,6 +43,28 @@
 </template>
 
 <script setup>
+
+/// import pinia store
+import {ref} from "vue";
+
+const formStore = useFormsStore();
+/// fetch form data from pinia store
+formStore.fetchFormsData();
+
+import {useFormsStore} from "../../store/forms.js";
+
+const waitingCount = ref(0)
+
+formStore.formsData.forEach(item => {
+  if (item.form_status == 0) {
+    waitingCount.value++;
+  }
+})
+
+
+
+
+
 </script>
 
 <style scoped>

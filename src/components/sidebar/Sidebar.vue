@@ -8,14 +8,14 @@
     </div>
 
     <!--    avatar component-->
-    <SidebarAvatarAdmin v-if="userRole === 1" />
-    <SidebarAvatar v-if="userRole === 2" />
+    <SidebarAvatarAdmin v-if="authStore.userRole === 1" />
+    <SidebarAvatar v-if="authStore.userRole === 2" />
     <!--    links and dropdowns-->
 
     <!--    link for admin-->
-    <SidebarItems v-if="userRole === 1"/>
+    <SidebarItems v-if="authStore.userRole === 1"/>
     <!--    links for client-->
-    <SiderbarItemsClient v-if="userRole === 2" />
+    <SiderbarItemsClient v-if="authStore.userRole === 2" />
 
   </div>
 </template>
@@ -28,9 +28,6 @@ import {ref} from "vue";
 import SiderbarItemsClient from "./SiderbarItemsClient.vue";
 import SidebarAvatarAdmin from "./SidebarAvatarAdmin.vue";
 import {useAuthStore} from "../../store/auth.js";
-
-
-const userRole = ref(2);
 
 const authStore = useAuthStore();
 

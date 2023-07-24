@@ -264,7 +264,6 @@ const errMessage = ref(false);
 
 
 // submit media in modal
-// submit media in modal
 const submitMedia = () => {
   if (titleInput.value.value === "") {
     console.log("title is empty")
@@ -289,7 +288,7 @@ const submitMedia = () => {
           }
         }).then(res => {
           loading.value = false;
-          mediaArray.push({url: `https://donfilm.net/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
+          mediaArray.push({url: `https://demo.aftabor.com/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
           axios.post("/media?action=set_media_meta", {
             request_params: {
               media_id: res.data[0].media_id,

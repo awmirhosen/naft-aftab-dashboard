@@ -55,10 +55,16 @@ export const useAuthStore = defineStore("auth", {
                 localStorage.setItem("token", res.data.jwt_token);
                 this.clearTokenTime();
                 this.jwtEncode(localStorage.getItem("token"));
+                axios.interceptors.request.use(function (config) {
+                    config.headers.Authorization = "Bearer "+localStorage.getItem("token")
+                    return config;
+                })
                 console.log(this.userInfo)
                 if (this.userInfo.user_role === "customer") {
+                    this.userRole = 2;
                     router.push("/bussiness");
-                } else if (this.userInfo.user_role === "admin") {
+                } else {
+                    this.userRole = 1;
                     router.push("/admin");
                 }
                 this.authFlag = true;
@@ -85,9 +91,15 @@ export const useAuthStore = defineStore("auth", {
                 this.clearTokenTime();
                 this.jwtEncode(localStorage.getItem("token"));
                 console.log(this.userInfo)
+                axios.interceptors.request.use(function (config) {
+                    config.headers.Authorization = "Bearer " + localStorage.getItem("token");
+                    return config;
+                })
                 if (this.userInfo.user_role === "customer") {
+                    this.userRole = 2;
                     router.push("/bussiness");
-                } else if (this.userInfo.user_role === "admin") {
+                } else {
+                    this.userRole = 1;
                     router.push("/admin");
                 }
                 loading.value = false;
@@ -106,16 +118,22 @@ export const useAuthStore = defineStore("auth", {
                         localStorage.setItem("token", res.data.jwt_token);
                         this.clearTokenTime();
                         this.jwtEncode(localStorage.getItem("token"));
-                        console.log(this.userInfo)
+                        console.log(this.userInfo);
+                        axios.interceptors.request.use(function (config) {
+                            config.headers.Authorization = "Bearer " + localStorage.getItem("token");
+                            return config;
+                        })
                         if (this.userInfo.user_role === "customer") {
+                            this.userRole = 2;
                              router.push("/bussiness");
-                        } else if (this.userInfo.user_role === "admin") {
+                        } else {
+                            this.userRole = 1;
                             router.push("/admin");
                         }
                         loading.value = false;
                     }).catch(err => {
                         if (err.response.data.error_code === "token_otp_not_valid") {
-                            this.loginErrors = "کد وارد شده صحیح نمی باشد"
+                            this.loginErrors = " کد وارد شده صحیح نمی باشد"
                             console.log("this")
                             loading.value = false;
                         } else if (err.response.data.error_code === "token_otp_is_expire") {
@@ -145,7 +163,6 @@ export const useAuthStore = defineStore("auth", {
                 } else if (err.response.data.code === 401) {
                     localStorage.removeItem("token");
                 }
-
                 usersError.forEach(item => {
                     if (item.en === err.response.data.error_code) {
                         console.log(item.fa);

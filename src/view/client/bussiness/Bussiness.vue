@@ -16,19 +16,42 @@
 
     <div class="w-full">
       <p class="text-xl mt-5">مشاهده ی وضعیت فرم ها:</p>
-      <div class="w-full mt-5 bg-zinc-100 rounded p-3">
-        <div class="flex w-full flex justify-around text-md">
-          <p class="w-full text-center">نام کسب و کار</p>
-          <p class="w-full text-center">نام نماینده کسب و کار</p>
-          <p class="w-full text-center">وضعیت</p>
-        </div>
-        <div class="flex w-full flex justify-around mt-4 items-center">
-          <p class="w-full text-center">برنامه نویسی و طراحی وبسایت</p>
-          <p class="w-full text-center">امیرحسین یزدان پرست</p>
-          <div class="w-full px-4 py-2 rounded">
-            <p class="bg-yellow-300 p-2 text-center rounded">در حال بررسی</p>
-          </div>
-        </div>
+
+      <div class="w-full text-center text-lg my-5 bg-blue-200 p-4 rounded " v-if="formStore.fetchFormsData === null">
+        شما هنوز فرمی را ثبت نکردید
+      </div>
+
+      <div class="w-full mt-5 bg-zinc-100 rounded p-3" v-else>
+        <table class="table-auto w-full text-center">
+          <thead>
+          <tr class="text-center">
+            <th>نام کسب و کار</th>
+            <th>نام صاحب کسب و کار</th>
+            <th>وضعیت</th>
+            <th>عملیات</th>
+          </tr>
+          </thead>
+          <tbody class="mt-4">
+          <tr v-for="formsData in formStore.fetchFormsData" class="mt-10">
+            <td>{{ formsData.business_name }}</td>
+            <td>{{ formsData.business_agent}}</td>
+            <td>
+              <div class="bg-amber-400 rounded text-white py-2" v-if="formsData.form_status == 0">در انتظار بررسی</div>
+            </td>
+            <td>
+              <div class="flex gap-2 justify-center items-center">
+                <div class="bg-blue-600 text-white p-2 rounded">
+                  ویرایش
+                </div>
+                <div class="bg-red-600 text-white p-2 rounded">
+                  حذف
+                </div>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
       </div>
     </div>
 
@@ -36,9 +59,6 @@
 </template>
 
 <script setup>
-
-import {axios} from "../../../axios/index.js";
-import router from "../../../router/index.js";
 import {useFormsStore} from "../../../store/forms.js";
 
 const formStore = useFormsStore();
@@ -46,14 +66,18 @@ const formStore = useFormsStore();
 const fetchForm = () => {
   if (localStorage.getItem("token") === null) {
     fetchForm();
-  }else {
+    console.log("nayoomade")
+  } else {
     formStore.fetchFormsData();
+    console.log(localStorage.getItem("token"))
+    console.log("oomad");
   }
 }
-
+fetchForm();
 
 </script>
 
 <style scoped>
+
 
 </style>

@@ -70,23 +70,24 @@ const usersSidebarToggle = () => {
   if (usersItemFlag.value === false) {
     usersItemFlag.value = true;
     usersItemDropdown.value.style.transform = "rotateZ(180deg)"
+    console.log("")
   }
 }
 
 // items flag for oppening and closing product item
-const ProducstItemFlag = ref(false)
+const ProducstItemFlag = ref(false);
 const ProductsItemDropdown = ref(null);
 // users toggle function
 const productSidebarToggle = () => {
   console.log(ProductsItemDropdown.value.style);
   if (ProducstItemFlag.value === true) {
     ProducstItemFlag.value = false;
-    ProductsItemDropdown.value.style.transform = "rotateZ(0deg)"
+    ProductsItemDropdown.value.style.transform = "rotateZ(0deg)";
     return;
   }
   if (ProducstItemFlag.value === false) {
     ProducstItemFlag.value = true;
-    ProductsItemDropdown.value.style.transform = "rotateZ(180deg)"
+    ProductsItemDropdown.value.style.transform = "rotateZ(180deg)";
   }
 }
 

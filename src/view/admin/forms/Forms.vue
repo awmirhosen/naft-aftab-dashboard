@@ -10,28 +10,40 @@
           <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div class="overflow-hidden">
-                <table class="min-w-full text-left text-sm font-light rounded">
-                  <thead class="border-b font-medium dark:border-neutral-500 bg-zinc-100 rounded">
-                  <tr>
-                    <th scope="col" class="px-6 py-4 text-center">نام کسب و کار</th>
-                    <th scope="col" class="px-6 py-4 text-center">نام نماینده کسب و کار</th>
-                    <th scope="col" class="px-6 py-4 text-center">عملیات</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr
-                      class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 hover:text-white dark:border-neutral-500 dark:hover:bg-neutral-600">
-                    <td class="whitespace-nowrap px-6 py-4 font-medium text-center">صندلی سازی</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-center">امیرحسین محمدی</td>
-                    <td class="whitespace-nowrap px-6 py-4 text-center flex justify-center">
-                      <div class=" rounded text-white cursor-pointer flex justify-center gap-2">
-                        <div class="px-2 py-1 rounded bg-red-600 text-white">حذف</div>
-                        <div class="px-2 py-1 rounded bg-blue-600 text-white">مشاهده</div>
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
+
+                <div class="w-full mt-5 bg-zinc-100 rounded p-3">
+                  <table class="table-auto w-full text-center">
+                    <thead>
+                    <tr class="text-center">
+                      <th>نام کسب و کار</th>
+                      <th>نام صاحب کسب و کار</th>
+                      <th>وضعیت</th>
+                      <th>عملیات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="mt-4">
+                    <tr v-for="formsData in formStore.formsData" class="mt-10">
+                      <td>{{ formsData.business_name }}</td>
+                      <td>{{ formsData.business_agent}}</td>
+                      <td>
+                        <div class="bg-amber-400 rounded text-white py-2" v-if="formsData.form_status == 0">در انتظار بررسی</div>
+                      </td>
+                      <td>
+                        <div class="flex gap-2 justify-center items-center">
+                          <div class="bg-blue-600 text-white p-2 rounded">
+                            ویرایش
+                          </div>
+                          <div class="bg-red-600 text-white p-2 rounded">
+                            حذف
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
               </div>
             </div>
           </div>
@@ -43,8 +55,15 @@
 
 <script setup>
 
-
 import Searchbox from "../../../components/ui/Searchbox.vue";
+import {useFormsStore} from "../../../store/forms.js";
+
+const formStore = useFormsStore();
+formStore.fetchFormsData();
+
+
+
+
 </script>
 
 <style scoped>
