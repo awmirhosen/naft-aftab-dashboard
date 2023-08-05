@@ -82,9 +82,12 @@
 
 import {ref} from "vue";
 import {useAuthStore} from "../../store/auth.js";
+import {useRouter} from "vue-router";
 // items flag for oppening and closing users item
 const usersItemFlag = ref(false)
 const usersItemDropdown = ref(null);
+
+const router = useRouter();
 
 const authStore = useAuthStore();
 
@@ -93,16 +96,17 @@ const usersSidebarToggle = () => {
   console.log(usersItemDropdown.value.style);
   if (usersItemFlag.value === true) {
     usersItemFlag.value = false;
-    usersItemDropdown.value.style.transform = "rotateZ(0deg)"
+    usersItemDropdown.value.style.transform = "rotateZ(0deg)";
     return;
   }
   if (usersItemFlag.value === false) {
     usersItemFlag.value = true;
-    usersItemDropdown.value.style.transform = "rotateZ(180deg)"
+    usersItemDropdown.value.style.transform = "rotateZ(180deg)";
   }
 }
 
 const logout = () => {
+  authStore.stepLogin = 1;
   localStorage.removeItem("token");
   clearTimeout(authStore.tokenTimer);
   router.push("/auth")

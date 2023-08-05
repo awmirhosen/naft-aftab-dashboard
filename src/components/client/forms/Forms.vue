@@ -146,6 +146,7 @@ const submitThirdForm = (values) => {
     const docIdArray = reactive([]);
 
     formStore.firstStepFiles.forEach(item => {
+
       docIdArray.push(item.id);
     })
 
@@ -154,25 +155,97 @@ const submitThirdForm = (values) => {
       catalogIdArray.push(item.id)
     })
 
-    const allData = reactive({
-      request_params: {
-        business_name: formStore.firstStepData.client_bussiness_name,
-        business_agent: formStore.firstStepData.client_full_name,
-        business_email: formStore.firstStepData.client_email,
-        agent_gender: formStore.firstStepData.client_gender,
-        business_document: docIdArray,
-        business_state: formStore.secondStepData.client_state,
-        business_city: formStore.secondStepData.client_city,
-        business_address: formStore.secondStepData.client_address,
-        business_postal_code: formStore.secondStepData.client_postalcode,
-        business_tel: formStore.secondStepData.client_telephone,
-        business_fax: formStore.secondStepData.client_fax,
-        business_type: values.bussiness_type,
-        business_category: category.value,
-        business_property: productNames,
-        business_catalog: catalogIdArray,
+    console.log(docIdArray.length)
+
+    let allData = reactive({})
+
+    if (catalogIdArray.length === [] && docIdArray.length === []){
+      console.log("doc empty")
+      allData = {
+          request_params: {
+            business_name: formStore.firstStepData.client_bussiness_name,
+            business_agent: formStore.firstStepData.client_full_name,
+            business_email: formStore.firstStepData.client_email,
+            agent_gender: formStore.firstStepData.client_gender,
+            // business_document: docIdArray,
+            business_state: formStore.secondStepData.client_state,
+            business_city: formStore.secondStepData.client_city,
+            business_address: formStore.secondStepData.client_address,
+            business_postal_code: formStore.secondStepData.client_postalcode,
+            business_tel: formStore.secondStepData.client_telephone,
+            business_fax: formStore.secondStepData.client_fax,
+            business_type: values.bussiness_type,
+            business_category: category.value,
+            business_property: productNames,
+            business_catalog: catalogIdArray,
+          }
       }
-    })
+    } else if (catalogIdArray.length === 0) {
+      console.log("catalog empty")
+      allData = {
+        request_params: {
+          business_name: formStore.firstStepData.client_bussiness_name,
+          business_agent: formStore.firstStepData.client_full_name,
+          business_email: formStore.firstStepData.client_email,
+          agent_gender: formStore.firstStepData.client_gender,
+          business_document: docIdArray,
+          business_state: formStore.secondStepData.client_state,
+          business_city: formStore.secondStepData.client_city,
+          business_address: formStore.secondStepData.client_address,
+          business_postal_code: formStore.secondStepData.client_postalcode,
+          business_tel: formStore.secondStepData.client_telephone,
+          business_fax: formStore.secondStepData.client_fax,
+          business_type: values.bussiness_type,
+          business_category: category.value,
+          business_property: productNames,
+          // business_catalog: catalogIdArray,
+        }
+      }
+    }else if (docIdArray.length === 0) {
+      console.log("both are empty")
+      allData = {
+        request_params: {
+          business_name: formStore.firstStepData.client_bussiness_name,
+          business_agent: formStore.firstStepData.client_full_name,
+          business_email: formStore.firstStepData.client_email,
+          agent_gender: formStore.firstStepData.client_gender,
+          // business_document: docIdArray,
+          business_state: formStore.secondStepData.client_state,
+          business_city: formStore.secondStepData.client_city,
+          business_address: formStore.secondStepData.client_address,
+          business_postal_code: formStore.secondStepData.client_postalcode,
+          business_tel: formStore.secondStepData.client_telephone,
+          business_fax: formStore.secondStepData.client_fax,
+          business_type: values.bussiness_type,
+          business_category: category.value,
+          business_property: productNames,
+          // business_catalog: catalogIdArray,
+        }
+      }
+    }else {
+      console.log("all full")
+      allData = {
+        request_params: {
+          business_name: formStore.firstStepData.client_bussiness_name,
+          business_agent: formStore.firstStepData.client_full_name,
+          business_email: formStore.firstStepData.client_email,
+          agent_gender: formStore.firstStepData.client_gender,
+          business_document: docIdArray,
+          business_state: formStore.secondStepData.client_state,
+          business_city: formStore.secondStepData.client_city,
+          business_address: formStore.secondStepData.client_address,
+          business_postal_code: formStore.secondStepData.client_postalcode,
+          business_tel: formStore.secondStepData.client_telephone,
+          business_fax: formStore.secondStepData.client_fax,
+          business_type: values.bussiness_type,
+          business_category: category.value,
+          business_property: productNames,
+          business_catalog: catalogIdArray,
+        }
+      }
+    }
+
+
 
     console.log(allData)
 
@@ -180,6 +253,7 @@ const submitThirdForm = (values) => {
 
     axios.post("forms", allData).then(res => {
       step.value = 4;
+      console.log(res)
     }).catch(err => {
       console.log(err)
       if (err.response.data.code === 401){

@@ -82,7 +82,7 @@
                    :value="formStore.firstStepData.client_full_name"
                    name="client_full_name"
                    class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                   placeholder="* نام کسب و کار"/>
+                   placeholder="* نام صاحب کسب و کار"/>
           </div>
         </div>
         <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_full_name"/>
@@ -96,7 +96,7 @@
                    :value="formStore.firstStepData.client_bussiness_name"
                    name="client_bussiness_name"
                    class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                   placeholder=" * نام و نام خانوادگی نماینده کسب و کار"/>
+                   placeholder=" * نام کسب و کار"/>
           </div>
         </div>
         <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_bussiness_name"/>

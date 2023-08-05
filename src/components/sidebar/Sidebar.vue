@@ -8,14 +8,14 @@
     </div>
 
     <!--    avatar component-->
-    <SidebarAvatarAdmin v-if="authStore.userRole === 1" />
-    <SidebarAvatar v-if="authStore.userRole === 2" />
+    <SidebarAvatarAdmin v-if="userRole === 1" />
+    <SidebarAvatar v-if="userRole === 2" />
     <!--    links and dropdowns-->
 
     <!--    link for admin-->
-    <SidebarItems v-if="authStore.userRole === 1"/>
+    <SidebarItems v-if="userRole === 1" />
     <!--    links for client-->
-    <SiderbarItemsClient v-if="authStore.userRole === 2" />
+    <SiderbarItemsClient v-if="userRole === 2" />
 
   </div>
 </template>
@@ -24,12 +24,22 @@
 import SidebarAvatar from "./SidebarAvatar.vue";
 import RoundedDesignTop from "./RoundedDesignTop.vue";
 import SidebarItems from "./SidebarItems.vue";
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import SiderbarItemsClient from "./SiderbarItemsClient.vue";
 import SidebarAvatarAdmin from "./SidebarAvatarAdmin.vue";
 import {useAuthStore} from "../../store/auth.js";
 
 const authStore = useAuthStore();
+
+const userRole = ref(false);
+
+onBeforeMount(() => {
+  if (localStorage.getItem("user_role") == 1) {
+    userRole.value = 1;
+  }else {
+    userRole.value = 2;
+  }
+})
 
 
 </script>

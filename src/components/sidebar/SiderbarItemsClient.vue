@@ -51,6 +51,7 @@
 
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import {useAuthStore} from "../../store/auth.js";
 
 
 //// useRouter
@@ -91,7 +92,10 @@ const productSidebarToggle = () => {
   }
 }
 
+const authStore = useAuthStore();
+
 const logoutUser = () => {
+  authStore.stepLogin = 1
   localStorage.removeItem("token");
   router.push("/auth");
 }

@@ -39,7 +39,7 @@ export const useAuthStore = defineStore("auth", {
             },
             loginCounterFlag: false,
             authFlag: false,
-            userRole: 1,
+            userRole: localStorage.getItem("user_role"),
             authStatus: "login",
             stepSignup: 1,
             stepLogin: 1,
@@ -61,10 +61,10 @@ export const useAuthStore = defineStore("auth", {
                 })
                 console.log(this.userInfo)
                 if (this.userInfo.user_role === "customer") {
-                    this.userRole = 2;
+                    localStorage.setItem("user_role", '2')
                     router.push("/bussiness");
                 } else {
-                    this.userRole = 1;
+                    localStorage.setItem("user_role", '1')
                     router.push("/admin");
                 }
                 this.authFlag = true;
@@ -86,7 +86,7 @@ export const useAuthStore = defineStore("auth", {
         },
         async loginUser(loginOtpData, loading) {
             await axios.post("auth?method=verify_mobile", loginOtpData).then(res => {
-                console.log("set item local")
+                console.log("set item local");
                 localStorage.setItem("token", res.data.jwt_token);
                 this.clearTokenTime();
                 this.jwtEncode(localStorage.getItem("token"));
@@ -96,10 +96,10 @@ export const useAuthStore = defineStore("auth", {
                     return config;
                 })
                 if (this.userInfo.user_role === "customer") {
-                    this.userRole = 2;
+                    localStorage.setItem("user_role", '2')
                     router.push("/bussiness");
                 } else {
-                    this.userRole = 1;
+                    localStorage.setItem("user_role", '1')
                     router.push("/admin");
                 }
                 loading.value = false;
@@ -124,10 +124,10 @@ export const useAuthStore = defineStore("auth", {
                             return config;
                         })
                         if (this.userInfo.user_role === "customer") {
-                            this.userRole = 2;
+                            localStorage.setItem("user_role", '2')
                              router.push("/bussiness");
                         } else {
-                            this.userRole = 1;
+                            localStorage.setItem("user_role", '1')
                             router.push("/admin");
                         }
                         loading.value = false;

@@ -243,14 +243,7 @@ const submitMedia = () => {
       } else {
         loading.value = true;
         formData.append("media", upload.value.files[0]);
-        axios.post("/media", formData, {
-          onUploadProgress(e) {
-            percent.value = Math.round((e.loaded * 100) / e.total)
-            if (percent.value > 99) {
-              percent.value = 0;
-            }
-          }
-        }).then(res => {
+        axios.post("/media", formData).then(res => {
           loading.value = false;
           mediaArray.push({url: `https://demo.aftabor.com/uploads/${res.data[0].media_link}`, id: res.data[0].media_id})
           axios.post("/media?action=set_media_meta", {

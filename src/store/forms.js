@@ -25,6 +25,7 @@ export const useFormsStore = defineStore("forms", {
                 client_telephone: "",
                 client_fax: "",
             },
+            singleFormData: [],
         }
     },
     actions: {
@@ -71,6 +72,9 @@ export const useFormsStore = defineStore("forms", {
         async fetchFormsData() {
             await axios.get("/forms").then(res => {
                 console.log(res)
+                if (res.data.result === "") {
+                    console.log("khaliiiiiiiiiiii")
+                }
                 this.formsData = res.data.result
                 console.log(res.data.result)
             }).catch(err => {
@@ -79,8 +83,16 @@ export const useFormsStore = defineStore("forms", {
                     localStorage.removeItem("token");
                     router.push("/auth");
                 }else if (err.response.data.code === 404 ) {
-                    this.formsData = null
+                    this.formsData = [];
                 }
+            })
+        },
+        fetchSingleFormData(formId) {
+            axios.get(`forms/${formId}`).then(res => {
+                console.log(res);
+                this.singleFormData = res.data.result
+            }).catch(err => {
+                console.log(err);
             })
         }
     }

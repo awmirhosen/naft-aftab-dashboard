@@ -1,7 +1,7 @@
 <template>
   <div class="p-5">
     <router-link to="/bussiness/add-form"
-                 class="bg-indigo-900 hover:bg-blue-900 cursor-pointer p-10 text-cenger flex justify-center items-center rounded text-white">
+                 class=" border-4 border-indigo-900 border-dashed border hover:bg-zinc-100 cursor-pointer p-10 text-cenger flex justify-center items-center rounded text-indigo-900">
       <div class="flex flex-col justify-center w-full">
         <p class="w-full text-center text-3xl">برای پر کردن فرم کسب و کار اینجا کلیک کنید</p>
         <div class="w-full text-center flex justify-center mt-4">
@@ -17,7 +17,7 @@
     <div class="w-full">
       <p class="text-xl mt-5">مشاهده ی وضعیت فرم ها:</p>
 
-      <div class="w-full text-center text-lg my-5 bg-blue-200 p-4 rounded " v-if="formStore.fetchFormsData === null">
+      <div class="w-full text-center text-lg my-5 bg-blue-200 p-4 rounded " v-if="formStore.formsData === null">
         شما هنوز فرمی را ثبت نکردید
       </div>
 
@@ -32,26 +32,26 @@
           </tr>
           </thead>
           <tbody class="mt-4">
-          <tr v-for="formsData in formStore.fetchFormsData" class="mt-10">
+          <tr v-for="formsData in formStore.formsData" class="mt-10">
             <td>{{ formsData.business_name }}</td>
             <td>{{ formsData.business_agent}}</td>
             <td>
               <div class="bg-amber-400 rounded text-white py-2" v-if="formsData.form_status == 0">در انتظار بررسی</div>
+              <div class="bg-green-700 rounded text-white py-2" v-if="formsData.form_status == 1">تایید شده</div>
+              <div class="bg-amber-400 rounded text-white py-2" v-if="formsData.form_status == 3">دارای نقص فنی</div>
             </td>
             <td>
               <div class="flex gap-2 justify-center items-center">
-                <div class="bg-blue-600 text-white p-2 rounded">
-                  ویرایش
-                </div>
-                <div class="bg-red-600 text-white p-2 rounded">
-                  حذف
+                <div class="text-white p-2 rounded">
+                  <div class="bg-blue-600 text-white p-2 rounded">
+                    ویرایش
+                  </div>
                 </div>
               </div>
             </td>
           </tr>
           </tbody>
         </table>
-
       </div>
     </div>
 

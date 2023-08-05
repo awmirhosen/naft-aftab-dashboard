@@ -37,10 +37,16 @@ const router = createRouter({
             name: "adminDashboard",
             component: () => import("../view/admin/Dashboard.vue"),
         },
+        // forms in admin
         {
             path: "/admin/forms",
             name: "adminForms",
             component: () => import("../view/admin/forms/Forms.vue"),
+        },
+        {
+            path: "/admin/forms/:form_id",
+            name: "showForm",
+            component: () => import("../view/admin/forms/ShowForm.vue"),
         },
         {
             path: "/admin/messages",
