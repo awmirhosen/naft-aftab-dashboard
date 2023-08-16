@@ -1,11 +1,14 @@
 import {defineStore} from "pinia";
-import {axios} from "../axios/index.js";
+import axios from "../axios/index.js";
 import router from "../router/index.js";
 
 
 export const useFormsStore = defineStore("forms", {
     state: () => {
         return {
+            searchedData: [],
+            editFormData: [],
+            editInputArray : [],
             modalFileInput: false,
             formsData: [],
             firstStepFiles: [],

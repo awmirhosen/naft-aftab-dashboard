@@ -1,21 +1,36 @@
 <template>
 <div class="text-center">
-  <div ref="container" class="flex gap-4 items-center justify-center">
-    <input
-        v-for="n in length"
-        :key="n" v-model="otpArray[n-1]"
-        maxlength="1"
-        type="text"
-        class=" border-zinc-500 border-b w-10 p-2 text-center"
-        @keyup="(e) => handleEnter(e, n-1)"
-    />
-  </div>
+<!--  <div ref="container" class="flex gap-4 items-center justify-center">-->
+<!--    <input-->
+<!--        v-for="n in length"-->
+<!--        :key="n" v-model="otpArray[n-1]"-->
+<!--        maxlength="1"-->
+<!--        type="text"-->
+<!--        class=" border-zinc-500 border-b w-10 p-2 text-center"-->
+<!--        @keyup="(e) => handleEnter(e, n-1)"-->
+<!--    />-->
+<!--  </div>-->
+
+<div class="w-full text-center my-5">
+  <input type="text" class="w-full text-center border border-2 border-zinc-200 p-3" maxlength="6" v-model="otpInput" @input="changeOtpInput" >
+</div>
+
 </div>
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
 import {useAuthStore} from "../../store/auth.js";
+
+const authStore = useAuthStore();
+
+const otpInput = ref("");
+
+const changeOtpInput = (e) => {
+  authStore.otpInput = e.currentTarget.value;
+  console.log(authStore.otpInput)
+};
+
 
 const otpProps = defineProps({
   length: {
@@ -27,7 +42,7 @@ const otpArray = ref([]);
 const container = ref(null);
 const otpEmit = defineEmits(['entered'])
 
-const authStore = useAuthStore();
+
 
 onMounted(() => {
   for(let i =0; i < otpProps.length; i++){

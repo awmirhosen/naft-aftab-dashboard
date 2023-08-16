@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {axios} from "../axios/index.js";
+import axios from "../axios/index.js";
 import router from "../router/index.js";
 
 
@@ -29,6 +29,7 @@ const loginError = [
 export const useAuthStore = defineStore("auth", {
     state: () => {
         return {
+            otpInput: "",
             sidebarFlag: false,
             loginErrors: null,
             jwtEncodeData: {},
@@ -53,6 +54,8 @@ export const useAuthStore = defineStore("auth", {
             await axios.post("auth?method=verify_mobile", data).then(res => {
                 console.log(res.data.jwt_token)
                 localStorage.setItem("token", res.data.jwt_token);
+                localStorage.setItem("user_login", res.data.user_login);
+                localStorage.setItem("fullname", res.data.user_nicename);
                 this.clearTokenTime();
                 this.jwtEncode(localStorage.getItem("token"));
                 axios.interceptors.request.use(function (config) {
@@ -88,6 +91,8 @@ export const useAuthStore = defineStore("auth", {
             await axios.post("auth?method=verify_mobile", loginOtpData).then(res => {
                 console.log("set item local");
                 localStorage.setItem("token", res.data.jwt_token);
+                localStorage.setItem("user_login", res.data.user_login);
+                localStorage.setItem("fullname", res.data.user_nicename);
                 this.clearTokenTime();
                 this.jwtEncode(localStorage.getItem("token"));
                 console.log(this.userInfo)
@@ -116,6 +121,8 @@ export const useAuthStore = defineStore("auth", {
                     axios.post("auth?method=sign_in_with_token", loginOtpData).then(res => {
                         console.log(res)
                         localStorage.setItem("token", res.data.jwt_token);
+                        localStorage.setItem("user_login", res.data.user_login);
+                        localStorage.setItem("fullname", res.data.user_nicename);
                         this.clearTokenTime();
                         this.jwtEncode(localStorage.getItem("token"));
                         console.log(this.userInfo);
@@ -181,10 +188,12 @@ export const useAuthStore = defineStore("auth", {
                 loading.value = false;
                 this.stepLogin = 2;
                 this.stepSignup = 2;
+                this.loginCounterFlag = false;
             }).catch(err => {
                 console.log(err.response.data.error_code)
                 if (err.response.data.error_code === "user_login_not_exist") {
                     this.signupError = "این شماره همراه در سیستم موجود نمیباشد، لطفا ثبت نام کنید"
+                    this.stepSignup = 1;
                     this.authStatus = "signup";
                 } else if (err.response.data.code === 401) {
                     localStorage.removeItem("token");
@@ -215,6 +224,13 @@ export const useAuthStore = defineStore("auth", {
             this.tokenTimer = setTimeout(() => {
                 localStorage.removeItem("token")
             }, 7200000)
+        },
+        checkAuthToken() {
+            axios.post("/auth?method=check_is_authorized").then(res => {
+                router.push("/bussiness");
+            }).catch(err => {
+                router.push("/auth");
+            })
         }
     }
 })

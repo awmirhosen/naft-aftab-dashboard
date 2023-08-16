@@ -40,7 +40,6 @@
       <Field as="textArea" name="client_address" :value="formStore.secondStepData.client_address"
              class="w-full shadow-md rounded p-2 h-24 border border-zinc-200"
              placeholder="*ادرس دقیق محل کسب و کار را وارد کنید"/>
-      <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_address"/>
     </div>
 
 

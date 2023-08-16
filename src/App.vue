@@ -25,12 +25,12 @@
 <script setup>
 import Sidebar from "./components/sidebar/Sidebar.vue";
 import {useRoute} from "vue-router";
-import {ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import Login from "./view/auth/Auth.vue";
 import {useAuthStore} from "./store/auth.js";
 
 const route = useRoute();
-const layout = ref(1)
+const layout = ref(1);
 
 watch(route, () => {
   switch (route.name) {
@@ -41,7 +41,6 @@ watch(route, () => {
       layout.value = 1;
       break;
   }
-
 })
 
 const authStore = useAuthStore();

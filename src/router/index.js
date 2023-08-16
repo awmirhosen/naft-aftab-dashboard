@@ -26,6 +26,11 @@ const router = createRouter({
             name: "clientMessage",
             component: () => import("../view/client/message/ClientMessage.vue"),
         },
+        {
+            path: "/client/form/:id",
+            name: "editFormClient",
+            component: () => import("../view/client/forms/EditFormClient.vue"),
+        },
         //*************************** admin
         {
             path: "/users",
@@ -53,6 +58,11 @@ const router = createRouter({
             name: "adminMessage",
             component: () => import("../view/admin/message/AdminMessage.vue"),
         },
+        {
+            path: "/admin/forms/search",
+            name: "searchForm",
+            component: () => import("../view/admin/forms/searchForm.vue"),
+        },
         //*************************** auth
         {
             path: "/auth",
@@ -79,6 +89,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
+    console.log("route change")
     if (to.name !== 'auth' && !localStorage.getItem("token")) next({ name: 'auth' })
     else next()
 })

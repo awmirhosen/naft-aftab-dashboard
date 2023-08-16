@@ -1,14 +1,15 @@
 import Axios from "axios";
-
-export const loginAxios = Axios.create({
-    baseURL: "/api/v1",
-})
+import {useRouter} from "vue-router";
 
 
+const router = useRouter();
 
-export const axios = Axios.create({
+
+const axios = Axios.create({
     baseURL: "/api/v1",
     headers : {
         Authorization: `Bearer ${localStorage.getItem("token")}`
     }
 })
+
+export default axios;

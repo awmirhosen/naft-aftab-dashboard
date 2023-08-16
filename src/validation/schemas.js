@@ -38,3 +38,21 @@ export const thirdFormSchema = reactive({
     client_bussiness_subcategory: Yup.string().required("پر کردن این فیلد الزامیست"),
     etc: Yup.string()
 })
+
+export const updateFormSchema = reactive({
+    business_name: Yup.string().required("این فیلد الزامیست"),
+    business_agent: Yup.string().required("این فیلد الزامیست"),
+    business_mobile: Yup.string().required("این فیلد اجباریست"),
+    business_email: Yup.string().required("پر کردن این فیلد الزامیست").email("فرمت وارد شده صحیح نیست"),
+    client_gender: Yup.string().required("انتخاب این فیلد الزامیست"),
+    business_state: Yup.string(),
+    business_city: Yup.string(),
+    business_address: Yup.string(),
+    business_postal_code: Yup.string(),
+    business_tel: Yup.string(),
+    business_fax: Yup.string(),
+    business_type: Yup.string(),
+    business_category: Yup.string(),
+
+
+})

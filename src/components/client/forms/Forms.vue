@@ -92,6 +92,7 @@
           </svg>
         </div>
       </div>
+
     </div>
 
   </div>
@@ -105,7 +106,7 @@ import FirstStep from "./FirstStep.vue";
 import ThirdStep from "./ThirdStep.vue";
 import SecondStep from "./SecondStep.vue";
 import {useFormsStore} from "../../../store/forms.js";
-import {axios} from "../../../axios/index.js";
+import axios from "../../../axios/index.js";
 
 const productError = ref(false);
 
@@ -137,8 +138,12 @@ const submitThirdForm = (values) => {
       productNames.push(item.phone)
     })
     const category = ref("");
+
     if (values.client_bussiness_subcategory === "etc") {
+      console.log("oftad to etc")
+      console.log(values.etc)
       category.value = values.etc
+      console.log(category.value)
     }else {
       category.value = Number(values.client_bussiness_subcategory);
     }
@@ -178,6 +183,7 @@ const submitThirdForm = (values) => {
             business_category: category.value,
             business_property: productNames,
             business_catalog: catalogIdArray,
+            business_mobile: localStorage.getItem("user_login"),
           }
       }
     } else if (catalogIdArray.length === 0) {
@@ -199,6 +205,7 @@ const submitThirdForm = (values) => {
           business_category: category.value,
           business_property: productNames,
           // business_catalog: catalogIdArray,
+          business_mobile: localStorage.getItem("user_login"),
         }
       }
     }else if (docIdArray.length === 0) {
@@ -220,6 +227,7 @@ const submitThirdForm = (values) => {
           business_category: category.value,
           business_property: productNames,
           // business_catalog: catalogIdArray,
+          business_mobile: localStorage.getItem("user_login"),
         }
       }
     }else {
@@ -241,11 +249,10 @@ const submitThirdForm = (values) => {
           business_category: category.value,
           business_property: productNames,
           business_catalog: catalogIdArray,
+          business_mobile: localStorage.getItem("user_login"),
         }
       }
     }
-
-
 
     console.log(allData)
 

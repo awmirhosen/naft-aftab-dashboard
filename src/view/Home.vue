@@ -4,12 +4,21 @@
 
 <script setup>
 import {onBeforeMount} from "vue";
-import {useFormsStore} from "../store/forms.js";
+import {useAuthStore} from "../store/auth.js";
+import {useRouter} from "vue-router";
+
+
+const authStore = useAuthStore();
 
 onBeforeMount(() => {
 
-  const formStore = useFormsStore();
-  formStore.fetchSingleFormData();
+  const router = useRouter();
+
+  authStore.checkAuthToken();
+
+  router.push("/bussiness")
+
+
 
 })
 </script>

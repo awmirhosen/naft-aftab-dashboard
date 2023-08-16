@@ -1,5 +1,6 @@
 <template>
-  <div class=" custom-shadow-1 w-80 overflow-x-hidden h-screen">
+  <div class=" w-80 overflow-x-hidden h-screen relative min-h-screen custom-shadow-1">
+
 
     <div class="absolute left-0 top-2 left-2 block md:hidden">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-red-500" @click="() => authStore.sidebarFlag = false ">
@@ -7,15 +8,16 @@
       </svg>
     </div>
 
-    <!--    avatar component-->
-    <SidebarAvatarAdmin v-if="userRole === 1" />
-    <SidebarAvatar v-if="userRole === 2" />
-    <!--    links and dropdowns-->
+      <!--    avatar component-->
+      <SidebarAvatarAdmin v-if="userRole === 1" />
+      <SidebarAvatar v-if="userRole === 2" />
+      <!--    links and dropdowns-->
 
-    <!--    link for admin-->
-    <SidebarItems v-if="userRole === 1" />
-    <!--    links for client-->
-    <SiderbarItemsClient v-if="userRole === 2" />
+      <!--    link for admin-->
+      <SidebarItems v-if="userRole === 1" />
+      <!--    links for client-->
+      <SiderbarItemsClient v-if="userRole === 2" />
+
 
   </div>
 </template>

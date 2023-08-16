@@ -64,6 +64,11 @@
       <button class="hover:bg-indigo-800 transiton-all bg-indigo-900 text-white rounded w-full mt-4 py-2"
               @click="sendLoginOtp">تایید کد
       </button>
+
+      <button class="hover:bg-zinc-400 bg-zinc-300 w-96 mx-auto transiton-all text-black rounded w-full mt-4 py-2" @click="backToLogin" >
+        <p>بازگشت</p>
+      </button>
+
     </div>
 
   </div>
@@ -90,6 +95,8 @@ const router = useRouter();
 
 
 const authStore = useAuthStore();
+
+authStore.signupError = "";
 const submitPhoneNumber = (values) => {
   loading.value = true;
   phoneNumber.value = values.user_login;
@@ -106,7 +113,7 @@ const sendLoginOtp = () => {
   const loginOtpData = {
     request_params: {
       user_login: user_login.value,
-      token: authStore.otpvalue,
+      token: authStore.otpInput,
     }
   }
   authStore.loginUser(loginOtpData, loading)
@@ -123,10 +130,16 @@ const resendLoginToken = () => {
     }
   }
   authStore.sendMobileToken(otpData, loading);
+  authStore.loginCounterFlag = false;
 }
 
 const goToSignup = () => {
+  authStore.stepSignup = 1;
   authStore.authStatus = "signup"
+}
+
+const backToLogin = () => {
+  authStore.stepLogin = 1;
 }
 
 </script>

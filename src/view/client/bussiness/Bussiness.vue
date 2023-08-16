@@ -24,8 +24,8 @@
       <div class="w-full mt-5 bg-zinc-100 rounded p-3" v-else>
         <table class="table-auto w-full text-center">
           <thead>
-          <tr class="text-center">
-            <th>نام کسب و کار</th>
+          <tr class="text-center p-2">
+            <th class="p-2">نام کسب و کار</th>
             <th>نام صاحب کسب و کار</th>
             <th>وضعیت</th>
             <th>عملیات</th>
@@ -33,17 +33,26 @@
           </thead>
           <tbody class="mt-4">
           <tr v-for="formsData in formStore.formsData" class="mt-10">
-            <td>{{ formsData.business_name }}</td>
-            <td>{{ formsData.business_agent}}</td>
+            <td class="p-2 mt-4">{{ formsData.business_name }}</td>
+            <td class="p-2">{{ formsData.business_agent}}</td>
             <td>
-              <div class="bg-amber-400 rounded text-white py-2" v-if="formsData.form_status == 0">در انتظار بررسی</div>
-              <div class="bg-green-700 rounded text-white py-2" v-if="formsData.form_status == 1">تایید شده</div>
-              <div class="bg-amber-400 rounded text-white py-2" v-if="formsData.form_status == 3">دارای نقص فنی</div>
+              <div class="rounded text-white py-2" v-if="formsData.form_status == 0">
+                <div class="bg-red-700 p-2 rounded text-white" v-if="formsData.form_status == 0">تایید نشده</div>
+              </div>
+              <div class="rounded text-white py-2" v-if="formsData.form_status == 1">
+                <div class="bg-green-700 p-2 rounded text-white" v-if="formsData.form_status == 1">تایید شده</div>
+              </div>
+              <div class="rounded text-white py-2" v-if="formsData.form_status == 2">
+                <div class="bg-amber-400 p-2 rounded text-white" v-if="formsData.form_status == 2">در انتظار بررسی</div>
+              </div>
+              <div class="rounded text-white py-2" v-if="formsData.form_status == 3">
+                <div class="bg-red-700 p-2 rounded text-white" v-if="formsData.form_status == 3">نقص فنی</div>
+              </div>
             </td>
             <td>
               <div class="flex gap-2 justify-center items-center">
                 <div class="text-white p-2 rounded">
-                  <div class="bg-blue-600 text-white p-2 rounded">
+                  <div @click="goToUpdate(formsData.form_id)" class="bg-blue-600 text-white p-2 rounded cursor-pointer">
                     ویرایش
                   </div>
                 </div>
@@ -60,8 +69,12 @@
 
 <script setup>
 import {useFormsStore} from "../../../store/forms.js";
+import {useRouter} from "vue-router";
+import axios from "../../../axios/index.js";
 
 const formStore = useFormsStore();
+
+const router = useRouter();
 
 const fetchForm = () => {
   if (localStorage.getItem("token") === null) {
@@ -74,6 +87,17 @@ const fetchForm = () => {
   }
 }
 fetchForm();
+
+const goToUpdate = async (id) => {
+  await axios.get(`/forms/${id}`).then(res => {
+    console.log(res.data.result);
+    formStore.editFormData = res.data.result;
+  }).catch(err => {
+    console.log(err);
+  });
+  router.push(`client/form/${id}`);
+}
+
 
 </script>
 

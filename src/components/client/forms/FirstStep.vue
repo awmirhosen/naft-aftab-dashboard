@@ -3,7 +3,7 @@
 
     <!--    modal of file input-->
     <div class="fixed top-0 left-0 flex justify-center items-center w-full h-screen bg-zinc-800/[0.7]"
-         v-if="formsStore.modalFileInput">
+         v-if="formStore.modalFileInput">
       <div class="w-96 rounded bg-white h-[500px] relative p-2">
         <div class="flex justify-between items-center">
           <p>آپلو کردن فایل</p>
@@ -48,7 +48,7 @@
 
                   <div class="w-full text-center flex justify-center gap-2 mt-4 items-center" v-if="percent > 0">
                     <p>{{ percent }} % </p>
-                    <Loader/>
+                    <Loader />
                   </div>
 
                   <div class="absolute bottom-5 w-full">
@@ -110,7 +110,7 @@
              dir="rtl">
           <div class="w-full">
             <Field type="text"
-                   value="09123260234"
+                   :value="businessPhone"
                    :disabled="true"
                    name="client_phone"
                    class="w-full h-12 px-4 py-1 text-gray-400 bg-zinc-200 focus:outline-none"
@@ -163,6 +163,9 @@
       <div @click="openFileUploadModal"
            class="w-full h-full rounded border-dashed border-2 cursor-pointer bg-zinc-100 p-2 border-zinc-900 flex justify-center items-center">
         <p>برای بارگذاری فایل اینجا کلیک کنید</p>
+        <div>
+
+        </div>
       </div>
 
       <div class="flex justify-center gap-4 mt-4" v-if="formsStore.firstStepFiles !== []">
@@ -194,7 +197,7 @@
 import {Field, ErrorMessage} from "vee-validate";
 import {useFormsStore} from "../../../store/forms.js";
 import {reactive, ref} from "vue";
-import {axios} from "../../../axios/index.js";
+import axios from "../../../axios/index.js";
 import Loader from "../../ui/Loader.vue";
 
 
@@ -215,6 +218,8 @@ const fileInputError = ref(false);
 
 
 const mediaArray = reactive([]);
+
+const businessPhone = ref(localStorage.getItem("user_login"))
 
 
 const formsStore = useFormsStore();

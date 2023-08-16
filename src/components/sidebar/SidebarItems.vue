@@ -107,6 +107,7 @@ const usersSidebarToggle = () => {
 
 const logout = () => {
   authStore.stepLogin = 1;
+  authStore.stepSignup = 1;
   localStorage.removeItem("token");
   clearTimeout(authStore.tokenTimer);
   router.push("/auth")

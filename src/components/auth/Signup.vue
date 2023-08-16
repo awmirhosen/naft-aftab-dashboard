@@ -116,6 +116,11 @@
           <p v-else>تایید کد</p>
         </button>
       </div>
+
+      <button class="hover:bg-zinc-400 w-96 mx-auto transiton-all bg-zinc-300 text-white text-white rounded w-full mt-4 py-2" @click="backToSignup" >
+        <p>بازگشت</p>
+      </button>
+
       <p class="text-center w-full text-red-600 mt-3">{{ authStore.signupError }}</p>
     </div>
   </div>
@@ -162,7 +167,7 @@ const submitOtp = () => {
   const data = {
     request_params : {
       user_login : user_login.value,
-      token : authStore.otpvalue,
+      token : authStore.otpInput,
     }
   }
 
@@ -178,6 +183,10 @@ const sendOtpAgain = () => {
   }
   authStore.loginCounterFlag = false;
   authStore.sendMobileToken(otpData, loading)
+}
+
+const backToSignup = () => {
+  authStore.stepSignup = 1;
 }
 
 </script>

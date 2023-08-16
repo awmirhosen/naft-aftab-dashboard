@@ -11,7 +11,7 @@
       </div>
       <!--      username-->
       <div>
-        <p class="text-zinc-900">امیرحسین محمدی</p>
+        <p class="text-zinc-900">{{ fullname }}</p>
         <p class="bg-blue-700/[.08] text-xs inline-block px-4 text-center mt-2 py-1 rounded-md text-blue-700">درخواست دهنده</p>
       </div>
     </div>
@@ -19,6 +19,10 @@
 </template>
 
 <script setup>
+
+import {ref} from "vue";
+
+const fullname = ref(localStorage.getItem("fullname"))
 
 </script>
 

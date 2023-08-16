@@ -170,7 +170,7 @@ import {Field, ErrorMessage, Form} from "vee-validate";
 import DynamicInput from "../../ui/DynamicInput.vue";
 import {reactive, ref} from "vue";
 import {useFormsStore} from "../../../store/forms.js";
-import {axios} from "../../../axios/index.js";
+import axios from "../../../axios/index.js";
 
 const bussCategory = ref(3)
 const bussSubcategory = ref(false);
