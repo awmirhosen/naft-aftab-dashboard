@@ -224,6 +224,7 @@ const businessPhone = ref(localStorage.getItem("user_login"))
 
 const formsStore = useFormsStore();
 const openFileUploadModal = () => {
+  errMessage.value = "",
   reset();
   formsStore.modalFileInput = true;
   errMessage.value = false;

@@ -6,21 +6,19 @@
 
       <div class="flex justify-between items-center mt-5">
 
-        <div class="px-5 bg-green-600 hover:bg-green-700 text-white inline-block py-2 cursor-pointer rounded" @click="reciveExel">
-          دریافت اکسل
-        </div>
-
         <div class="flex justify-between">
           <Searchbox />
         </div>
+
       </div>
 
       <a :href="excelLink" ref="excelDownloadElement">
 
       </a>
 
-      <div class="mt-5 w-full">
-        <div class="flex flex-col">
+      <div class="mt-5 w-full flex gap-4">
+
+        <div class="flex flex-col w-full">
           <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
               <div class="overflow-hidden">
@@ -34,6 +32,7 @@
                     <tr>
                       <th>نام کسب و کار</th>
                       <th>نام صاحب کسب و کار</th>
+                      <th>تلفن همراه</th>
                       <th>وضعیت</th>
                       <th>عملیات</th>
                     </tr>
@@ -42,6 +41,7 @@
                     <tr v-for="formsData in formStore.formsData" class="my-4">
                       <td class="text-center">{{ formsData.business_name }}</td>
                       <td class="text-center">{{ formsData.business_agent}}</td>
+                      <td class="text-center">{{ formsData.business_mobile}}</td>
                       <td>
                         <div class="bg-red-600 rounded text-white py-2 text-center hover:bg-red-500 cursor-not-allowed" v-if="formsData.form_status == 0">تایید نشده</div>
                         <div class="bg-green-600 rounded text-white py-2 text-center hover:bg-green-500 cursor-not-allowed" v-if="formsData.form_status == 1">تایید شده</div>
@@ -52,9 +52,16 @@
                         <div class="flex gap-2 justify-center items-center ">
                           <div class="text-white p-2 rounded">
                             <div class="bg-blue-600 text-white p-2 rounded text-center cursor-pointer hover:bg-blue-700 cursor-pointer" @click="showForm(formsData.form_id)">
-                              مشاهده و تفییر وضعیت
+                              مشاهده
                             </div>
                           </div>
+
+                          <div class="text-white p-2 rounded">
+                            <div class="bg-red-600 text-white p-2 rounded text-center cursor-pointer hover:bg-red-700 cursor-pointer" @click="showForm(formsData.form_id)">
+                              حذف
+                            </div>
+                          </div>
+
                         </div>
                       </td>
                     </tr>
@@ -68,6 +75,48 @@
           </div>
         </div>
       </div>
+
+        <div class="w-80 mt-7">
+          <div class="w-full rounded px-2 py-5 border border-1">
+            <div>
+              <p class="mb-2">تاریخ مورد نظر را وارد کنید</p>
+              <DatePicker v-model="date" clearable></DatePicker>
+              <p class="text-center text-red-500">{{ dateError }}</p>
+              <button @click="backAllForms" class="w-full py-2 mt-4 bg-red-600 rounded text-white" type="button" v-if="dateStatus" >پاک کردن</button>
+              <button @click="filterFormByDate" class="w-full py-2 mt-4 bg-indigo-900 rounded text-white" type="button" v-else >اعمال تاریخ</button>
+            </div>
+
+            <div class="w-full mt-4">
+              <p class="mb-1">دریافت اکسل تمامی فرم ها</p>
+              <div class="w-full mt-2 text-center bg-green-600 hover:bg-green-700 text-white inline-block py-2 cursor-pointer rounded" @click="reciveExel">
+                دریافت اکسل
+              </div>
+            </div>
+
+            <div class="w-full mt-4">
+              <p class="mb-2">وضعیت فرم ها</p>
+
+              <div class="flex flex-col gap-y-3">
+                <div class="flex">
+                  <input @input="radioFormStatus" type="radio" name="hs-radio-vertical-group" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-radio-vertical-group-1" checked value="all">
+                  <label for="hs-radio-vertical-group-1" class="text-sm text-gray-500 ml-2 dark:text-gray-400 mr-2">همه</label>
+                </div>
+
+                <div class="flex">
+                  <input @input="radioFormStatus" value="confirmed" type="radio" name="hs-radio-vertical-group" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-radio-vertical-group-2">
+                  <label for="hs-radio-vertical-group-2" class="text-sm text-gray-500 ml-2 dark:text-gray-400 mr-2">تایید شده</label>
+                </div>
+
+                <div class="flex">
+                  <input value="declined" type="radio" name="hs-radio-vertical-group" class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" id="hs-radio-vertical-group-3">
+                  <label for="hs-radio-vertical-group-3" class="text-sm text-gray-500 ml-2 dark:text-gray-400 mr-2">تایید نشده</label>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
     </div>
   </div>
   </div>
@@ -79,13 +128,19 @@ import Searchbox from "../../../components/ui/Searchbox.vue";
 import {useFormsStore} from "../../../store/forms.js";
 import {useRouter} from "vue-router";
 import axios from "../../../axios/index.js";
+import DatePicker from '@alireza-ab/vue3-persian-datepicker';
+
+
 import {ref} from "vue";
+const date = ref("")
 
 const formStore = useFormsStore();
 formStore.fetchFormsData();
 
 const router = useRouter();
 const excelLink = ref("#")
+
+const dateStatus = ref(false);
 
 const excelDownloadElement = ref(null);
 
@@ -100,28 +155,74 @@ const showForm = (id) => {
 
 const reciveExel = async () => {
 
-  await axios.get("/forms?action=export_excel", {
-    headers : {
-      "Content-Type" : "application/force-download"
-    }
-  }).then(res => {
-    console.log(res);
+  if (date.value === "") {
+    await axios.get("/forms?action=export_excel", {
+      headers : {
+        "Content-Type" : "application/force-download"
+      }
+    }).then(res => {
+      console.log(res);
 
-     excelLink.value = res.data.file_url;
+      excelLink.value = res.data.file_url;
 
-     setTimeout(() => {
-       excelDownloadElement.value.click();
-     }, 600)
+      setTimeout(() => {
+        excelDownloadElement.value.click();
+      }, 600)
 
 
+    }).catch(err => {
+      console.log(err)
+    })
+  }else {
+    console.log("date")
+    await axios.get(`/forms?action=export_excel&date_from=${date.value[0]}&date_to=${date.value[1]}`, {
+      headers : {
+        "Content-Type" : "application/force-download"
+      }
+    }).then(res => {
+      console.log(res);
+
+      excelLink.value = res.data.file_url;
+
+      setTimeout(() => {
+        excelDownloadElement.value.click();
+      }, 600)
+
+
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+}
+
+const backAllForms = () => {
+  formStore.formsData = formStore.formsDataAlternate;
+  dateStatus.value = false;
+  date.value = "";
+  document.querySelector(".pdp-clear").click();
+}
+
+const dateError = ref("");
+
+const filterFormByDate = () => {
+  console.log(date.value[0])
+  formStore.formsDataAlternate = formStore.formsData;
+
+  axios.get(`/forms?date_from=${date.value[0]}&date_to=${date.value[1]}`).then(res => {
+    console.log(res)
+    dateStatus.value = true;
+    dateError.value = "";
+    formStore.formsData = res.data.result;
   }).catch(err => {
+    dateError.value = "اطلاعاتی یافت نشد"
     console.log(err)
   })
 }
 
-
-
-
+const radioFormStatus = (e) => {
+  console.log(e.currentTarget.value)
+}
 
 
 </script>
