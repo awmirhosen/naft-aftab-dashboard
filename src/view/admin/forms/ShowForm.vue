@@ -99,7 +99,6 @@
         <div class="flex mt-4 gap-4">
           <button class="bg-red-600 text-white px-3 py-2 rounded" @click="declineForm">رد کردن فرم</button>
           <button class="bg-green-600 text-white px-3 py-2 rounded" @click="confirmForm">تایید فرم</button>
-          <button class="bg-amber-400 text-white px-3 py-2 rounded" @click="declineDoc">نقص مدارک</button>
           <RouterLink to="/admin/forms">
             <button class="bg-zinc-600 text-white px-3 py-2 rounded" >بازگشت</button>
           </RouterLink>

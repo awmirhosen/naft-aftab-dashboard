@@ -4,20 +4,15 @@
 
       <p class="text-xl">فرم ها</p>
 
-      <div class="flex justify-between items-center mt-5">
-
-        <div class="px-5 bg-green-600 hover:bg-green-700 text-white inline-block py-2 cursor-pointer rounded" @click="reciveExel">
-          دریافت اکسل
-        </div>
-
-        <div class="flex justify-between">
+      <div class="flex justify-between items-end mt-5">
+        <div class="flex justify-between items-center">
           <Searchbox />
+          <RouterLink to="/admin/forms" class="px-5 py-2 border border-1 rounded border-indigo-900 text-indigo-900">
+            بازگشت
+          </RouterLink>
         </div>
       </div>
 
-      <a :href="excelLink" ref="excelDownloadElement">
-
-      </a>
 
       <div class="bg-indigo-900 text-center w-full text-center my-10 p-5 text-white rounded" v-if="formStore.searchedData.length == 0">
         نتیجه ای برای جستجوی شما پیدا نشد
@@ -38,6 +33,7 @@
                       <tr>
                         <th>نام کسب و کار</th>
                         <th>نام صاحب کسب و کار</th>
+                        <th>تلفت همراه</th>
                         <th>وضعیت</th>
                         <th>عملیات</th>
                       </tr>
@@ -46,6 +42,7 @@
                       <tr v-for="formsData in formStore.searchedData" class="my-4">
                         <td class="text-center">{{ formsData.business_name }}</td>
                         <td class="text-center">{{ formsData.business_agent}}</td>
+                        <td class="text-center">{{ formsData.business_mobile}}</td>
                         <td>
                           <div class="bg-red-600 rounded text-white py-2 text-center hover:bg-red-500 cursor-not-allowed" v-if="formsData.form_status == 0">تایید نشده</div>
                           <div class="bg-green-600 rounded text-white py-2 text-center hover:bg-green-500 cursor-not-allowed" v-if="formsData.form_status == 1">تایید شده</div>
@@ -56,9 +53,16 @@
                           <div class="flex gap-2 justify-center items-center ">
                             <div class="text-white p-2 rounded">
                               <div class="bg-blue-600 text-white p-2 rounded text-center cursor-pointer hover:bg-blue-700 cursor-pointer" @click="showForm(formsData.form_id)">
-                                مشاهده و تفییر وضعیت
+                                مشاهده
                               </div>
                             </div>
+
+                            <div class="text-white p-2 rounded">
+                              <div class="bg-red-600 text-white p-2 rounded text-center cursor-pointer cursor-pointer" @click="deleteForm(formsData.form_id)">
+                                حذف
+                              </div>
+                            </div>
+
                           </div>
                         </td>
                       </tr>
@@ -124,6 +128,18 @@ const reciveExel = async () => {
   })
 }
 
+const deleteForm = () => {
+  axios.delete(`/forms/${id}`).then(res => {
+    console.log(res)
+    formStore.fetchFormsData();
+  }).catch(err => {
+    if (err.data.code === 401) {
+      authStore.stepSignup = 1;
+      authStore.stepLogin = 1;
+      router.push("/auth")
+    }
+  })
+}
 
 
 

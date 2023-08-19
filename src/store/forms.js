@@ -80,6 +80,7 @@ export const useFormsStore = defineStore("forms", {
                     console.log("khaliiiiiiiiiiii")
                 }
                 this.formsData = res.data.result
+                this.formsDataAlternate = res.data.result;
                 console.log(res.data.result)
             }).catch(err => {
                 console.log(err);
