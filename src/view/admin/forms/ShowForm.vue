@@ -96,9 +96,20 @@
           </div>
         </div>
 
+        <div class="flex justify-start w-full">
+          <div class="p-5">
+            <div class="px-5 py-2">
+
+            </div>
+          </div>
+        </div>
+
         <div class="flex mt-4 gap-4">
-          <button class="bg-red-600 text-white px-3 py-2 rounded" @click="declineForm">رد کردن فرم</button>
-          <button class="bg-green-600 text-white px-3 py-2 rounded" @click="confirmForm">تایید فرم</button>
+          <div>
+            <button class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded" @click="confirmForm" v-if="formStore.singleFormData.form_status === '0' ">تایید فرم</button>
+            <button v-else class="bg-red-600 hover:bg-red-500 text-white px-3 py-2 rounded" @click="declineForm">رد کردن فرم</button>
+          </div>
+<!--          <button class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded" @click="confirmForm">تایید فرم</button>-->
           <RouterLink to="/admin/forms">
             <button class="bg-zinc-600 text-white px-3 py-2 rounded" >بازگشت</button>
           </RouterLink>
@@ -117,13 +128,17 @@
 <script setup>
 
 import {useFormsStore} from "../../../store/forms.js";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import axios from "../../../axios/index.js";
+import {useAuthStore} from "../../../store/auth.js";
+import router from "../../../router/index.js";
 
 const formStore = useFormsStore();
 const route = useRoute();
 const message  = ref("")
+
+
 
 onBeforeMount(() => {
   formStore.fetchSingleFormData(route.params.form_id);
@@ -140,22 +155,15 @@ const confirmForm = () => {
     }
   }).then(res => {
     message.value = "وضعیت فرم به حالت تاییده شده، تغییر پیدا کرد"
-    console.log(res)
-  }).catch(err => {
-    console.log(err)
-  })
-}
 
-const declineDoc = () => {
-  axios.put("/forms/?action=update_form_status", {
-    request_params: {
-      form_id: formStore.singleFormData.form_id,
-      form_status: 3,
-      user_id: parseInt(formStore.singleFormData.user_id)
-    }
-  }).then(res => {
-    message.value = "وضعیت فرم به حالت دارای نقص فنی تغییر پیدا کرد"
-    console.log(res)
+    formStore.formsData.forEach(item => {
+      if (item.form_id == formStore.singleFormData.form_id ) {
+        item.form_status = 1
+        console.log(formStore.formsData)
+      }
+    })
+
+    formStore.singleFormData.form_status = "1";
   }).catch(err => {
     console.log(err)
   })
@@ -169,12 +177,25 @@ const declineForm = () => {
       user_id: parseInt(formStore.singleFormData.user_id)
     }
   }).then(res => {
-    message.value = "وضعیت فرم به حالت عدم تایید تغییر پیدا کرد"
-    console.log(res)
+    message.value = "وضعیت فرم به حالت عدم تایید تغییر پیدا کرد";
+
+    formStore.formsData.forEach(item => {
+      if (item.form_id == formStore.singleFormData.form_id ) {
+        item.form_status = 0
+        console.log(formStore.formsData)
+      }
+    })
+
+    formStore.singleFormData.form_status = "0";
   }).catch(err => {
-    console.log(err)
+    if (err.response.data.code === 401) {
+      localStorage.removeItem("token");
+      router.push("/auth")
+    }
   })
 }
+
+
 
 
 </script>

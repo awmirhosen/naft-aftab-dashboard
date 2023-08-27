@@ -29,7 +29,7 @@ export const secondStepFormSchema = reactive({
     client_city: Yup.string().required("انتخاب شهر استان مورد نظر الزامیست"),
     client_address: Yup.string().required("وارد کردن آدرس الزامیست"),
     client_postalcode: Yup.string().required("پر کردن کد پستی الزامیست").matches(/^[0-9]{5,10}$/, "کد پستی شما معتبر نیست"),
-    client_telephone: Yup.string().required("پر کردن این فیلد الزامیست").matches(/^[0-9]{8,11}$/, "تلفن قابت معتبر نیست"),
+    client_telephone: Yup.string().required("پر کردن این فیلد الزامیست").matches(/^[0-9]{8,11}$/, "تلفن ثابت معتبر نیست"),
     client_fax: Yup.string(),
 })
 

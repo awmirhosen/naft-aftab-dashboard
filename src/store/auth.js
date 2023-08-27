@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import axios from "../axios/index.js";
 import router from "../router/index.js";
+import {onMounted} from "vue";
 
 
 const usersError = [
@@ -197,7 +198,11 @@ export const useAuthStore = defineStore("auth", {
                     this.authStatus = "signup";
                 } else if (err.response.data.code === 401) {
                     localStorage.removeItem("token");
-                } else {
+                }else if (err.response.data.code === 406) {
+                    this.signupError = "شما تازه وارد شدید، برای ورود مجدد صبر کنید"
+                    loading.value = false;
+                }
+                else {
                     this.signupError = "مشکلی در ارسال پیام پیش آمده"
                     loading.value = false;
                 }
@@ -228,9 +233,11 @@ export const useAuthStore = defineStore("auth", {
         checkAuthToken() {
             axios.post("/auth?method=check_is_authorized").then(res => {
                 router.push("/bussiness");
+                console.log("cheked")
             }).catch(err => {
                 router.push("/auth");
             })
         }
     }
 })
+

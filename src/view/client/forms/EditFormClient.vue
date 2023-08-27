@@ -286,7 +286,7 @@
 
         <div class="p-4 border rounded" v-for="(propertyFile, index) in propertyDocument"
              :key="index">
-          <img :src='propertyFile.media_link' class="h-36"/>
+          <img :src='propertyFile.media_link' class="h-36" alt="property_file" />
           <p class="w-full text-center mt-2">{{ propertyFile.media_caption }}</p>
           <div
               class="w-36 py-1 bg-red-500 hover:bg-red-600 text-white text-center text-xs cursor-pointer my-2 rounded" @click="deleteProperty(index)">
@@ -424,15 +424,14 @@ const updateFormData = (values) => {
     propertyDocId.push(item.media_id)
   });
 
-  const propertyEditedInput = reactive([])
+  const propertyEditedInput = reactive([]);
 
   formStore.editInputArray.forEach(item => {
     console.log(item)
     propertyEditedInput.push(item.phone);
   })
 
-  console.log(propertyEditedInput)
-
+  console.log(propertyEditedInput);
 
   if (propertyDocId.length === [] && businessDocId.length === []){
     console.log("doc empty")
@@ -579,7 +578,7 @@ const mediaArray = reactive([]);
 const formsStore = useFormsStore();
 const openFileUploadModal = (index) => {
   console.log(index);
-  mediaStatus.value = 1;
+  mediaStatus.value = index;
   reset();
   formsStore.modalFileInput = true;
   errMessage.value = false;
@@ -626,8 +625,9 @@ const errMessage = ref(false);
 
 // submit media in modal
 const submitMedia = (index) => {
-  console.log(index)
-  if (mediaStatus == '1') {
+  console.log(mediaStatus)
+  if (mediaStatus.value == 1) {
+    console.log("service");
     if (titleInput.value.value === "") {
       console.log("title is empty")
       titleInputError.value = true;

@@ -30,13 +30,14 @@
 <script setup>
 
 /// import pinia store
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 
 const formStore = useFormsStore();
 /// fetch form data from pinia store
 formStore.fetchFormsData();
 
 import {useFormsStore} from "../../store/forms.js";
+import {useAuthStore} from "../../store/auth.js";
 const formsStatus = ref("در حال دریافت اطلاعات");
 
 const waitingCount = ref(0)
@@ -50,7 +51,6 @@ if (formStore.formsData.length === 0) {
     }
   })
 }
-
 
 
 

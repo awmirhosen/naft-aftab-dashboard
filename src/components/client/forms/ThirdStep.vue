@@ -95,8 +95,9 @@
           <Field name="client_bussiness_subcategory" as="select" class="w-full bg-zinc-100 p-3 rounded"
                  @change="subcategoryChange">
             <option value="" selected>*دسته بندی کالا</option>
-            <option value="1">تکنولوژی</option>
-            <option value="2">ساختمان</option>
+            <option v-for="(category, index) in taxonomiesStore.categories" :value="category.name" >
+              {{category.name}}
+            </option>
             <option value="etc">سایر</option>
           </Field>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right"
@@ -107,8 +108,9 @@
           <Field as="select" name="client_bussiness_subcategory" class="w-full bg-zinc-100 p-3 rounded"
                  @change="subcategoryChange">
             <option value="" selected>دسته بندی خدمات</option>
-            <option value="1">تکنولوژی</option>
-            <option value="2">ساختمان</option>
+            <option v-for="(category, index) in taxonomiesStore.categories" :value="category.name" >
+              {{category.name}}
+            </option>
             <option value="etc">سایر</option>
           </Field>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right"
@@ -171,6 +173,8 @@ import DynamicInput from "../../ui/DynamicInput.vue";
 import {reactive, ref} from "vue";
 import {useFormsStore} from "../../../store/forms.js";
 import axios from "../../../axios/index.js";
+import router from "../../../router/index.js";
+import {useTaxonomies} from "../../../store/taxonomies.js";
 
 const bussCategory = ref(3)
 const bussSubcategory = ref(false);
@@ -191,6 +195,8 @@ const loading = ref(false);
 
 const mediaArray = reactive([]);
 const formsStore = useFormsStore();
+
+const taxonomiesStore = useTaxonomies()
 
 const openFileUploadModal = () => {
   reset();
@@ -282,9 +288,27 @@ const subcategoryChange = (e) => {
 const onchangeBussinesCategory = (e) => {
   console.log(e.target.value)
   if (e.target.value === "service") {
+    axios.get(`taxonomies?term_parent=service`).then(res => {
+      taxonomiesStore.categories = res.data.result;
+      console.log(res);
+    }).catch(err => {
+      if (err.response.data.code === 401) {
+        localStorage.removeItem("token");
+        router.push("/auth");
+      }
+    })
     bussCategory.value = 2;
     bussSubcategory.value = false;
   } else if (e.target.value === "product") {
+    axios.get(`taxonomies?term_parent=product`).then(res => {
+      taxonomiesStore.categories = res.data.result;
+      console.log(res);
+    }).catch(err => {
+      if (err.response.data.code === 401) {
+        localStorage.removeItem("token");
+        router.push("/auth");
+      }
+    })
     bussCategory.value = 1;
     bussSubcategory.value = false;
   } else {

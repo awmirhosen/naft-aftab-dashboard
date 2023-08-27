@@ -86,8 +86,9 @@
 import Searchbox from "../../../components/ui/Searchbox.vue";
 import {useFormsStore} from "../../../store/forms.js";
 import {useRouter} from "vue-router";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "../../../axios/index.js";
+import {useAuthStore} from "../../../store/auth.js";
 
 
 
@@ -140,6 +141,8 @@ const deleteForm = () => {
     }
   })
 }
+
+
 
 
 

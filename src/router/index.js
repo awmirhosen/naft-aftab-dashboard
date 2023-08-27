@@ -49,6 +49,11 @@ const router = createRouter({
             component: () => import("../view/admin/forms/Forms.vue"),
         },
         {
+            path: "/admin/categories",
+            name: "businessCategories",
+            component: () => import("../view/admin/BusinessCategories.vue"),
+        },
+        {
             path: "/admin/forms/:form_id",
             name: "showForm",
             component: () => import("../view/admin/forms/ShowForm.vue"),

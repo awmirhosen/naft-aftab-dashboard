@@ -42,7 +42,10 @@ export const useFormsStore = defineStore("forms", {
                 })
                 this.mediaMeta(res.data[0].media_id, title, mediaArray)
             }).catch(err => {
-                if (err.response.data.code === 400) {
+                if (err.response.data.code === 401) {
+                    localStorage.removeItem("token");
+                    router.push("/auth")
+                }else if (err.response.data.code === 400) {
                     loading.value = false;
                     errMessage.value = "فایل معتبر نمیباشد، عکس یا داکیومنت وارد شده نمیتواند بیشتر از یک مگابایت باشد و یا فرمت غیر معتبر داشته باشد"
                 } else {

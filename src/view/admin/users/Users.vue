@@ -49,6 +49,8 @@
 import Searchbox from "../../../components/ui/Searchbox.vue";
 import {useUserStore} from "../../../store/user.js";
 import axios from "../../../axios/index.js";
+import {onBeforeMount} from "vue";
+import {useAuthStore} from "../../../store/auth.js";
 
 const userStore = useUserStore();
 userStore.fetchAllUsers();
@@ -61,6 +63,7 @@ const deleteUser = (id) => {
     console.log(err)
   })
 }
+
 
 
 </script>

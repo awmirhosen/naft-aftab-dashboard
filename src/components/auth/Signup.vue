@@ -7,7 +7,8 @@
 
     <div class="w-100 h-100" v-if="authStore.stepSignup === 1">
       <p class="text-md text-center w-100">خوش آمدید</p>
-      <p class="text-sm text-center w-100">برای ثبت نام لطفا موارد زیر را وارد کنید</p>
+      <p class="text-sm text-center w-100">برای ثبت نام لطفا اطلاعات زیر را تکمیل کنید</p>
+      <p class="text-md mb-3 text-center">حتما از زبان انگلیسی استفاده کنید</p>
       <!--      start sign up form-->
       <Form class="p-4" @submit="submitSignup" :validation-schema="signupShcema" >
 

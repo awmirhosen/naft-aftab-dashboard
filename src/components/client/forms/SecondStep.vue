@@ -1,6 +1,7 @@
 <template>
   <div class="step-2 w-full">
     <div class="w-full">
+      <p class="text-center w-full my-2">برای پر کردن فیلدهایی که از اعداد استفاده میشود، حتما کیبورد خود را به حالت انگلیسی تغییر دهید</p>
       <div class="flex gap-3">
         <!--states-->
         <div class="mb-4 w-full">
@@ -70,7 +71,7 @@
                      :value="formStore.secondStepData.client_telephone"
                      name="client_telephone"
                      class="w-full h-12 px-4 py-1 text-gray-800 focus:outline-none"
-                     placeholder="* تلفن ثابت محل کسب و کار را همراه با کد شهر وارد کنید"/>
+                     placeholder="* تلفن ثابت  را همراه با کد شهر وارد کنید"/>
             </div>
           </div>
           <ErrorMessage class="text-sm text-red-600 block mt-2 mr-4 w-100 text-right" name="client_telephone"/>

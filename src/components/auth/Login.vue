@@ -47,6 +47,7 @@
     <!--- otp field --->
     <div class="p-3" v-if="authStore.stepLogin === 2">
       <p class="text-md mb-3 text-center">کد ارسال شده را وارد کنید</p>
+      <p class="text-md mb-3 text-center">حتما از زبان انگلیسی استفاده کنید</p>
       <p class="w-full text-center my-3 text-red-600">{{ authStore.loginErrors }}</p>
       <OTPPad :length="6"/>
       <div class="flex justify-center text-blue-600 text-lg mt-8">

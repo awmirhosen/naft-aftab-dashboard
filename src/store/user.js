@@ -1,5 +1,7 @@
 import {defineStore} from "pinia";
 import axios from "../axios/index.js";
+import router from "../router/index.js";
+
 
 export const useUserStore = defineStore("user", {
     state : () => {
@@ -15,6 +17,7 @@ export const useUserStore = defineStore("user", {
             }).catch(err => {
                 if (err.response.code === 401) {
                     localStorage.removeItem("token");
+                    router.push("/auth")
                 }
                 console.log(err)
             })

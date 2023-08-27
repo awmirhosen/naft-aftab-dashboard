@@ -77,7 +77,10 @@
         <div class="w-full text-red-600 text-center mb-3" v-if="productError">
           حداقل دو محصول یا خدمات را باید وارد کنید
         </div>
-        <button type="submit" class="w-full p-2 mb-3 p-2 bg-indigo-900 text-white rounded hover:bg-indigo-800">ثبت اطلاعات</button>
+        <button type="submit" class="w-full p-2 mb-3 p-2 bg-indigo-900 text-white rounded hover:bg-indigo-800 text-center flex justify-center">
+          <p v-if="!loading">ثبت اطلاعات</p>
+          <Loader v-else />
+        </button>
         <button @click.prevent="() => step = 2" class="w-full bg-zinc-300 hover:bg-zinc-400 transition-all p-2 rounded">مرحله ی قبلی</button>
       </Form>
     </div>
@@ -107,8 +110,11 @@ import ThirdStep from "./ThirdStep.vue";
 import SecondStep from "./SecondStep.vue";
 import {useFormsStore} from "../../../store/forms.js";
 import axios from "../../../axios/index.js";
+import Loader from "../../ui/Loader.vue";
 
 const productError = ref(false);
+
+const loading = ref(false);
 
 const step = ref(1);
 
@@ -128,6 +134,8 @@ const submitSecondForm = (values) => {
 
 const submitThirdForm = (values) => {
 
+  loading.value = true;
+
   console.log(formStore.property)
 
   if (formStore.property.length < 2) {
@@ -145,7 +153,7 @@ const submitThirdForm = (values) => {
       category.value = values.etc
       console.log(category.value)
     }else {
-      category.value = Number(values.client_bussiness_subcategory);
+      category.value = values.client_bussiness_subcategory;
     }
 
     const docIdArray = reactive([]);
@@ -261,12 +269,14 @@ const submitThirdForm = (values) => {
     axios.post("forms", allData).then(res => {
       step.value = 4;
       console.log(res)
+      loading.value = false;
     }).catch(err => {
       console.log(err)
+      loading.value = false;
       if (err.response.data.code === 401){
         localStorage.removeItem("token");
       }else {
-        errMessage.value = "مشکلی در ارتباط با سرور پیش آمده"
+        errMessage.value = err.response.data.error_code
       }
     })
 

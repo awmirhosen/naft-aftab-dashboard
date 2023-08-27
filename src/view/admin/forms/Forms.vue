@@ -26,7 +26,6 @@
                 <div class="w-full mt-5 bg-zinc-100 rounded p-3">
                 <div class="w-full mt-5 bg-zaxiosinc-100 rounded p-3">
 
-
                   <table class="table-auto w-full">
                     <thead>
                     <tr>
@@ -137,12 +136,13 @@ import axios from "../../../axios/index.js";
 import DatePicker from '@alireza-ab/vue3-persian-datepicker';
 
 
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {useAuthStore} from "../../../store/auth.js";
 const date = ref("")
 
 const formStore = useFormsStore();
 formStore.fetchFormsData();
+
 
 const router = useRouter();
 const excelLink = ref("#")
@@ -154,6 +154,7 @@ const excelDownloadElement = ref(null);
 const linkExport = async (link) => {
    excelLink.value = link;
 }
+
 
 
 const showForm = (id) => {
